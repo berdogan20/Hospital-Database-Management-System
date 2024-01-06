@@ -360,14 +360,13 @@ def create_record_table():
                                                  PRIMARY KEY (record_id),
                                                  FOREIGN KEY (appointment_id) REFERENCES Appointment(appointment_id),
                                                  FOREIGN KEY (patient_id) REFERENCES Patient(patient_id),
-                                                 FOREIGN KEY (doctor_id) REFERENCES Doctor(doctor_id)
-)""")
+                                                 FOREIGN KEY (doctor_id) REFERENCES Doctor(doctor_id))""")
     
-        insert_rooms = (
+        insert_records = (
             "INSERT INTO Record(record_id , appointment_id, patient_id, doctor_id) "
             "VALUES (%s, %s, %s, %s)"
         )
-        populate_table(db_connection, db_cursor, insert_rooms, "Record.csv")
+        populate_table(db_connection, db_cursor, insert_records, "Record.csv")
 
 create_record_table()  
 
@@ -383,6 +382,8 @@ doctors_list = db_cursor.fetchall()
 db_cursor.execute("""SELECT *
                     FROM Administrator""")
 administrators_list = db_cursor.fetchall()
+
+
 
 @app.route('/')
 def hello_world():  # put application's code here
