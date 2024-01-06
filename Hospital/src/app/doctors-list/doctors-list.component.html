@@ -9,37 +9,11 @@
     </div> <!-- Row end  -->
     <div class="row g-3 row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 row-cols-xl-4 row-cols-xxl-4 row-deck py-1 pb-4">
       <ul>
-        <li *ngFor="let doctor of doctorsList">
-          Doctor ID: {{ doctor.doctor_id }} - Name: {{ doctor.fname }} {{ doctor.lname }}
+        <li *ngFor="let doctor of doctors">
+          <p>{{ doctor[4] }}</p>
+          <p>{{ doctor[2] }}</p>
         </li>
-    </ul>
-      <!-- <app-doctors-list-item></app-doctors-list-item>
-      <app-doctors-list-item></app-doctors-list-item>
-      <app-doctors-list-item></app-doctors-list-item>
-      <app-doctors-list-item></app-doctors-list-item>
-      <app-doctors-list-item></app-doctors-list-item>
-      <app-doctors-list-item></app-doctors-list-item>
-      <app-doctors-list-item></app-doctors-list-item>
-      <app-doctors-list-item></app-doctors-list-item>
-      <app-doctors-list-item></app-doctors-list-item>
-      <app-doctors-list-item></app-doctors-list-item>
-      <app-doctors-list-item></app-doctors-list-item>
-      <app-doctors-list-item></app-doctors-list-item>
-      <app-doctors-list-item></app-doctors-list-item>
-      <app-doctors-list-item></app-doctors-list-item>
-      <app-doctors-list-item></app-doctors-list-item>
-      <app-doctors-list-item></app-doctors-list-item>
-      <app-doctors-list-item></app-doctors-list-item>
-      <app-doctors-list-item></app-doctors-list-item>
-      <app-doctors-list-item></app-doctors-list-item>
-      <app-doctors-list-item></app-doctors-list-item>
-      <app-doctors-list-item></app-doctors-list-item>
-      <app-doctors-list-item></app-doctors-list-item>
-      <app-doctors-list-item></app-doctors-list-item>
-      <app-doctors-list-item></app-doctors-list-item>
-      <app-doctors-list-item></app-doctors-list-item>
-      <app-doctors-list-item></app-doctors-list-item>
-      <app-doctors-list-item></app-doctors-list-item> -->
+      </ul>
     </div>
   </div>
 </div>

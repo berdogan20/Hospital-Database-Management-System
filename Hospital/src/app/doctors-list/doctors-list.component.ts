@@ -1,20 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-
+import {DoctorsService} from "./doctors.service";
 @Component({
   selector: 'app-doctors-list',
   templateUrl: './doctors-list.component.html',
   styleUrls: ['./doctors-list.component.css']
 })
 export class DoctorsListComponent implements OnInit {
-  doctorsList: any[] = [];
+  doctors: any[];
 
-  constructor(private http: HttpClient) {}
+  constructor(private doctorsService: DoctorsService) {
+  }
 
-  ngOnInit() {
-    this.http.get<any[]>('http://127.0.0.1:5000/api/doctors')
+  ngOnInit(): void {
+    this.getDoctors();
+  }
+
+  getDoctors(): void {
+    this.doctorsService.getDoctors()
       .subscribe((data) => {
-        this.doctorsList = data;
+        this.doctors = data;
+        console.log(this.doctors); // Do something with the data
       });
   }
 }
