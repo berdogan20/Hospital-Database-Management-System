@@ -30,6 +30,6 @@ export class DoctorsListComponent implements OnInit {
       });
       console.log(this.doctors); // Ensure Doctor instances are created
     });
-}
+  }
 
 }

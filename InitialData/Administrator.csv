@@ -1,4 +1,4 @@
-﻿department_id,adm_id,phone_number,fname,lname,email
+﻿department_id,admin_id,phone_number,fname,lname,email
 DPT001,ADM001,123-456-7890,John,Smith,john.smith@example.com
 DPT002,ADM002,987-654-3210,Amy,Johnson,amy.johnson@example.com
 DPT003,ADM003,111-222-3333,Michael,Garcia,michael.garcia@example.com

@@ -1,0 +1,11 @@
+﻿medicine_id,medicine_timing,medicine_amount,doctor_id,patient_id
+101,Morning,1,DOC001,1
+102,Afternoon,2,DOC002,2
+103,Evening,1,DOC003,3
+104,Morning,1,DOC004,4
+105,Afternoon,2,DOC005,5
+106,Evening,1,DOC006,6
+107,Morning,1,DOC007,7
+108,Afternoon,2,DOC008,8
+109,Evening,1,DOC009,9
+110,Morning,1,DOC010,10

@@ -1,0 +1,11 @@
+﻿patient_id,fname,lname,email,phone_number,birth_date,age,sex,insurance_details
+1,John,Doe,john.doe@example.com,123-456-7890,1990-05-15,32,M,Insurance Company A
+2,Jane,Smith,jane.smith@example.com,987-654-3210,1985-08-21,36,F,Insurance Company B
+3,Michael,Johnson,michael.johnson@example.com,111-222-3333,1978-12-10,43,M,Insurance Company C
+4,Emily,Williams,emily.williams@example.com,444-555-6666,1995-03-25,27,F,Insurance Company D
+5,David,Brown,david.brown@example.com,777-888-9999,1982-09-18,39,M,Insurance Company E
+6,Sophia,Jones,sophia.jones@example.com,222-333-4444,1992-11-30,29,F,Insurance Company F
+7,James,Miller,james.miller@example.com,555-666-7777,1975-06-07,46,M,Insurance Company G
+8,Olivia,Davis,olivia.davis@example.com,888-999-0000,1988-04-12,33,F,Insurance Company H
+9,Daniel,Garcia,daniel.garcia@example.com,333-444-5555,1998-07-23,23,M,Insurance Company I
+10,Chloe,Wilson,chloe.wilson@example.com,999-000-1111,1993-10-05,28,F,Insurance Company J

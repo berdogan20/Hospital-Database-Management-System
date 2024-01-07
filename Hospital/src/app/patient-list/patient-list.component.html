@@ -51,16 +51,13 @@
               </th>
             </tr>
             </thead>
-            <tbody>
-
-            <tr role="row" class="odd">
-              <td tabindex="0" class="sorting_1">PT-0001</td>
-              <td><span>Molly </span></td>
-              <td>45</td>
-              <td style="">70 Bowman St. South Windsor, CT 06074</td>
-            </tr>
-
-
+             <tbody *ngFor="let patient of patients">
+              <tr role="row" class="odd">
+                  <td tabindex="0" class="sorting_1" >{{ patient.patientId }}</td>
+                  <td><span>{{ patient.firstName }} {{ patient.lastName }}</span></td>
+                  <td>{{ patient.email }}</td>
+                  <td>{{ patient.phoneNumber }}</td>
+              </tr>
             </tbody>
           </table></div></div><div class="row"><div class="col-sm-12 col-md-5"><div class="dataTables_info" id="patient-table_info" role="status" aria-live="polite">Showing 1 to 10 of 10 entries</div></div><div class="col-sm-12 col-md-7"><div class="dataTables_paginate paging_simple_numbers" id="patient-table_paginate"><ul class="pagination"><li class="paginate_button page-item previous disabled" id="patient-table_previous"><a href="#" aria-controls="patient-table" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li><li class="paginate_button page-item active"><a href="#" aria-controls="patient-table" data-dt-idx="1" tabindex="0" class="page-link">1</a></li><li class="paginate_button page-item next disabled" id="patient-table_next"><a href="#" aria-controls="patient-table" data-dt-idx="2" tabindex="0" class="page-link">Next</a></li></ul></div></div></div></div>
         </div>

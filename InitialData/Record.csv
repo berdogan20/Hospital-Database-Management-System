@@ -1,0 +1,11 @@
+﻿record_id,appointment_id,patient_id,doctor_id
+1,1,1,DOC001
+2,2,2,DOC002
+3,3,3,DOC003
+4,4,4,DOC004
+5,5,5,DOC005
+6,6,6,DOC006
+7,7,7,DOC007
+8,8,8,DOC008
+9,9,9,DOC009
+10,10,10,DOC010
