@@ -31,7 +31,7 @@ def create_staff_table():
                                                  department_id CHAR(10),
                                                  phone_number CHAR(15),
                                                  email VARCHAR(100),
-                                                 PRIMARY KEY (stafF_id)
+                                                 PRIMARY KEY (staff_id)
                                                  """)
 
         insert_staff = (
