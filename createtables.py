@@ -24,14 +24,14 @@ def create_staff_table():
     table_name = "Staff"
     if not table_exists(table_name):
         # Create Table
-        db_cursor.execute("""CREATE TABLE Staff( staff_id INT,
+        db_cursor.execute("""CREATE TABLE Staff( staff_id INT NOT NULL,
                                                  fname VARCHAR(50),
                                                  lname VARCHAR(50),
                                                  sex CHAR(1),
                                                  department_id CHAR(10),
                                                  phone_number CHAR(15),
                                                  email VARCHAR(100),
-                                                 PRIMARY KEY (staff_id)
+                                                 PRIMARY KEY (staff_id))
                                                  """)
 
         insert_staff = (
@@ -49,16 +49,17 @@ def create_nurse_table():
     table_name = "Nurse"
     if not table_exists(table_name):
         # Create Table
-        db_cursor.execute("""CREATE TABLE Nurse(nurse_id INT,
+        db_cursor.execute("""CREATE TABLE Nurse(nurse_id INT NOT NULL,
                                                 doctor_id INT,
                                                 department_id INT,
-                                                FOREIGN KEY (nurse_id) REFERENCES Staff,
-                                                PRIMARY KEY (doctor_id) REFERENCES Doctor)""")
+                                                PRIMARY KEY (nurse_id),
+                                                FOREIGN KEY (nurse_id) REFERENCES Staff(staff_id),
+                                                FOREIGN KEY (doctor_id) REFERENCES Doctor(doctor_id))""")
         insert_nurses = (
-            "INSERT INTO Doctor(nurse_id, doctor_id, department_id) "
+            "INSERT INTO Nurse(nurse_id, doctor_id, department_id) "
             "VALUES (%s, %s, %s)"
         )
-        populate_table(db_connection, db_cursor, insert_nurses, "InitialData/Nurse.csv")
+        #populate_table(db_connection, db_cursor, insert_nurses, "InitialData/Nurse.csv")
 
 
 create_nurse_table()
@@ -133,7 +134,7 @@ def create_room_table():
             "INSERT INTO Room(room_no , type, status, cost_per_month, patient_id) "
             "VALUES (%s, %s, %s, %s, %s)"
         )
-        populate_table(db_connection, db_cursor, insert_rooms, "InitialData/Room.csv")
+        #populate_table(db_connection, db_cursor, insert_rooms, "InitialData/Room.csv")
 
 
 create_room_table()
@@ -148,15 +149,15 @@ def create_bill_table():
                                                 patient_id INT,
                                                 appointment_id INT,
                                                 PRIMARY KEY (patient_id, appointment_id),
-                                                FOREIGN KEY (patient_id) REFERENCES Patient,
-                                                FOREIGN KEY (appointment_id) REFERENCES Appointment
+                                                FOREIGN KEY (patient_id) REFERENCES Patient(patient_id),
+                                                FOREIGN KEY (appointment_id) REFERENCES Appointment(appointment_id)
                                                 )""")
 
         insert_rooms = (
             "INSERT INTO Bill(bill_amount , patient_id, appointment_id) "
             "VALUES (%s, %s, %s)"
         )
-        populate_table(db_connection, db_cursor, insert_rooms, "InitialData/Bill.csv")
+        #populate_table(db_connection, db_cursor, insert_rooms, "InitialData/Bill.csv")
 
 
 create_bill_table()
@@ -168,19 +169,19 @@ def create_attends_table():
     if not table_exists(table_name):
         # Create Table
         db_cursor.execute("""CREATE TABLE Attends(doctor_id INT,
-                                                    appointmnet_id INT,
+                                                    appointment_id INT,
                                                     nurse_id INT,
-                                                    PRIMARY KEY(doctor_id, appointment_id, nurse_id),
+                                                    PRIMARY KEY (doctor_id, appointment_id, nurse_id),
                                                     FOREIGN KEY (doctor_id) REFERENCES Doctor(doctor_id),
-                                                    FOREIGN KEY (appointment_id) REFERENCES Appointment,
-                                                    FOREIGN KEY (nurse_id) REFERENCES Nurse
+                                                    FOREIGN KEY (appointment_id) REFERENCES Appointment(appointment_id),
+                                                    FOREIGN KEY (nurse_id) REFERENCES Nurse(nurse_id)
                                                 )""")
 
         insert_rooms = (
-            "INSERT INTO Attends(doctor_id , appointmnet_id, nurse_id) "
+            "INSERT INTO Attends(doctor_id , appointment_id, nurse_id) "
             "VALUES (%s, %s, %s)"
         )
-        populate_table(db_connection, db_cursor, insert_rooms, "InitialData/Attends.csv")
+        #populate_table(db_connection, db_cursor, insert_rooms, "InitialData/Attends.csv")
 
 
 create_attends_table()
@@ -195,9 +196,9 @@ def create_scheduled_to_table():
                                                        patient_id INT,
                                                        nurse_id INT,
                                                        PRIMARY KEY(patient_id, doctor_id, nurse_id),
-                                                       FOREIGN KEY (patient_id) REFERENCES Patient,
+                                                       FOREIGN KEY (patient_id) REFERENCES Patient(patient_id),
                                                        FOREIGN KEY (doctor_id) REFERENCES Doctor(doctor_id),
-                                                       FOREIGN KEY (nurse_id) REFERENCES Nurse,
+                                                       FOREIGN KEY (nurse_id) REFERENCES Nurse(nurse_id)
                                                 )""")
 
         insert_rooms = (
@@ -221,8 +222,8 @@ def create_treats_table():
                                                  doctor_id INT,
                                                  patient_id INT,
                                                  PRIMARY KEY(medicine_id, patient_id, doctor_id),
-                                                 FOREIGN KEY (patient_id) REFERENCES Patient,
-                                                 FOREIGN KEY (doctor_id ) REFERENCES Doctor
+                                                 FOREIGN KEY (patient_id) REFERENCES Patient(patient_id),
+                                                 FOREIGN KEY (doctor_id) REFERENCES Doctor(doctor_id)
                                                 )""")
 
         insert_rooms = (
@@ -243,7 +244,7 @@ def create_address_table():
         db_cursor.execute("""CREATE TABLE Address(patient_id INT,
                                                   address CHAR(50),
                                                   PRIMARY KEY(patient_id, address),
-                                                  FOREIGN KEY (patient_id) REFERENCES Patient
+                                                  FOREIGN KEY (patient_id) REFERENCES Patient(patient_id)
                                                 )""")
 
         insert_rooms = (
@@ -264,7 +265,7 @@ def create_disease_table():
         db_cursor.execute("""CREATE TABLE Disease(patient_id INT,
                                                   disease CHAR(50),
                                                   PRIMARY KEY(patient_id, disease),
-                                                  FOREIGN KEY (patient_id) REFERENCES Patient
+                                                  FOREIGN KEY (patient_id) REFERENCES Patient(patient_id)
                                                  )""")
 
         insert_rooms = (
