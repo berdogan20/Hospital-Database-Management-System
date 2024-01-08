@@ -59,7 +59,7 @@ def create_nurse_table():
             "INSERT INTO Nurse(nurse_id, doctor_id, department_id) "
             "VALUES (%s, %s, %s)"
         )
-        #populate_table(db_connection, db_cursor, insert_nurses, "InitialData/Nurse.csv")
+        populate_table(db_connection, db_cursor, insert_nurses, "InitialData/Nurse.csv")
 
 
 create_nurse_table()
@@ -134,7 +134,7 @@ def create_room_table():
             "INSERT INTO Room(room_no , type, status, cost_per_month, patient_id) "
             "VALUES (%s, %s, %s, %s, %s)"
         )
-        #populate_table(db_connection, db_cursor, insert_rooms, "InitialData/Room.csv")
+        populate_table(db_connection, db_cursor, insert_rooms, "InitialData/Room.csv")
 
 
 create_room_table()
@@ -157,7 +157,7 @@ def create_bill_table():
             "INSERT INTO Bill(bill_amount , patient_id, appointment_id) "
             "VALUES (%s, %s, %s)"
         )
-        #populate_table(db_connection, db_cursor, insert_rooms, "InitialData/Bill.csv")
+        populate_table(db_connection, db_cursor, insert_rooms, "InitialData/Bill.csv")
 
 
 create_bill_table()
@@ -181,7 +181,7 @@ def create_attends_table():
             "INSERT INTO Attends(doctor_id , appointment_id, nurse_id) "
             "VALUES (%s, %s, %s)"
         )
-        #populate_table(db_connection, db_cursor, insert_rooms, "InitialData/Attends.csv")
+        populate_table(db_connection, db_cursor, insert_rooms, "InitialData/Attends.csv")
 
 
 create_attends_table()
