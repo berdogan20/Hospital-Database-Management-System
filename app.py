@@ -383,7 +383,24 @@ db_cursor.execute("""SELECT *
                     FROM Administrator""")
 administrators_list = db_cursor.fetchall()
 
-
+# trigger for gender constraint query
+db_cursor.execute("""CREATE TRIGGER enforce_gender_constraint
+BEFORE INSERT ON Doctors
+FOR EACH ROW
+BEGIN
+  DECLARE total_doctors INT;
+  DECLARE women_doctors INT;
+  SELECT COUNT(*) INTO total_doctors FROM Doctors;
+  SELECT COUNT(*) INTO women_doctors FROM Doctors WHERE Gender = 'Female';
+  DECLARE women_percentage FLOAT;
+  SET women_percentage = (women_doctors / total_doctors) * 100;
+  IF NEW.Gender = 'Male' AND women_percentage >= 55 THEN
+    SIGNAL SQLSTATE '45000'
+    SET MESSAGE_TEXT = 'Cannot add more male doctors. Constraint violated.';
+  END IF;
+END;"""
+)
+gender_constraint_list = db_cursor.fetchall()
 
 @app.route('/')
 def hello_world():  # put application's code here
