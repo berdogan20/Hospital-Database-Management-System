@@ -33,7 +33,8 @@ export class PatientListComponent implements OnInit, OnDestroy{
           patientData[5],
           patientData[6],
           patientData[7],
-          patientData[8]
+          patientData[8],
+          patientData[9]
         );
       });
       console.log(this.patients); // Ensure Doctor instances are created

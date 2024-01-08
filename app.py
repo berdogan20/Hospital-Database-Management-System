@@ -11,7 +11,7 @@ CORS(app)  # Enable CORS for all routes
 db_connection = mysql.connector.connect(
   host="localhost",
   user="root",
-  passwd="bbmsh899",
+  passwd="123678zulal",
   auth_plugin='mysql_native_password'
 )
 
@@ -21,11 +21,10 @@ mysql = MySQL(app)
 db_cursor = db_connection.cursor(buffered=True)
 
 # executing cursor with execute method and pass SQL query
-# db_cursor.execute("DROP DATABASE hospital")
-
 db_cursor.execute("CREATE DATABASE IF NOT EXISTS hospital")
 
 db_cursor.execute("USE hospital")
+
 
 def populate_table(db_connection, db_cursor, insert_query, file_path):
     with open(file_path, mode='r') as csv_data:
@@ -47,68 +46,88 @@ def table_exists(table_name):
 
 
 ########################## CREATE TABLES ##########################
-# doctors table
-def create_doctor_table():
-    table_name = "Doctor"
-    if not table_exists(table_name):
-        # Create Table
-        db_cursor.execute("""CREATE TABLE Doctor( doctor_id CHAR(15) NOT NULL, 
-                                                   gender CHAR(1), 
-                                                   lname CHAR(50), 
-                                                   specialization CHAR(50), 
-                                                   fname CHAR(50), 
-                                                   department_id CHAR(10), 
-                                                   email CHAR(50), 
-                                                   phone_number CHAR(15), 
-                                                   PRIMARY KEY (doctor_id))""")
-        insert_doctors = (
-            "INSERT INTO Doctor(doctor_id, gender, lname, specialization, fname, department_id, email, phone_number) "
-            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
-        )
-        populate_table(db_connection, db_cursor, insert_doctors, "InitialData/Doctors.csv")
 
-create_doctor_table()
 
 # administrator table
 def create_administrator_table():
     table_name = "Administrator"
     if not table_exists(table_name):
         # Create Table
-        db_cursor.execute("""CREATE TABLE Administrator( department_id CHAR(10) NOT NULL,  
-                                                         admin_id CHAR(15) NOT NULL, 
-                                                         phone_number CHAR(15), 
+        db_cursor.execute("""CREATE TABLE Administrator(admin_id CHAR(6) NOT NULL, 
                                                          fname CHAR(50), 
                                                          lname CHAR(50), 
+                                                         phone_number CHAR(11), 
                                                          email CHAR(50), 
                                                          PRIMARY KEY (admin_id))""")
         insert_administrators = (
-            "INSERT INTO Administrator(department_id, admin_id, phone_number, fname, lname, email) "
-            "VALUES (%s, %s, %s, %s, %s, %s)"
+            "INSERT INTO Administrator(admin_id, fname, lname, phone_number, email) "
+            "VALUES (%s, %s, %s, %s, %s)"
         )
         populate_table(db_connection, db_cursor, insert_administrators, "InitialData/Administrator.csv")
 
 create_administrator_table()
 
-# patient table
+#department table
+def create_department_table():
+    table_name = "Department"
+    if not table_exists(table_name):
+        #Create Table
+        db_cursor.execute("""CREATE TABLE Department(department_id CHAR(6) NOT NULL,  
+                                                      department_name VARCHAR(50) NOT NULL, 
+                                                      PRIMARY KEY (department_id))""")
+        insert_departments = (
+            "INSERT INTO Department(department_id, department_name)"
+            "VALUES (%s, %s)"
+        )
+        populate_table(db_connection, db_cursor, insert_departments, "InitialData/Department.csv")
 
+create_department_table()
+
+
+# doctors table
+def create_doctor_table():
+    table_name = "Doctor"
+    if not table_exists(table_name):
+        # Create Table
+        db_cursor.execute("""CREATE TABLE Doctor(doctor_id CHAR(6) NOT NULL, 
+                                                   gender CHAR(1),                                                    
+                                                   lname VARCHAR(50), 
+                                                   specialization VARCHAR(50), 
+                                                   fname VARCHAR(50), 
+                                                   department_id CHAR(6), 
+                                                   phone_number CHAR(11), 
+                                                   email VARCHAR(50), 
+                                                   PRIMARY KEY (doctor_id),
+                                                   FOREIGN KEY (department_id) REFERENCES Department (department_id))""")
+        insert_doctors = (
+            "INSERT INTO Doctor(doctor_id, gender, lname, specialization, fname, department_id, phone_number, email) "
+            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+        )
+        populate_table(db_connection, db_cursor, insert_doctors, "InitialData/Doctors.csv")
+
+create_doctor_table()
+
+
+# patient table
 def create_patient_table():
     table_name = "Patient"
     if not table_exists(table_name):
         # Create Table
-        db_cursor.execute("""CREATE TABLE Patient(patient_id INT,
+        db_cursor.execute("""CREATE TABLE Patient(patient_id CHAR(6) NOT NULL,
                                                   fname VARCHAR(50),
                                                   lname VARCHAR(50),
                                                   email VARCHAR(50),
-                                                  phone_number CHAR(15),
+                                                  phone_number CHAR(11), 
                                                   birth_date DATE,
                                                   age INT,
                                                   sex CHAR(1),
+                                                  address VARCHAR(50),
                                                   insurance_details VARCHAR(255),
                                                   PRIMARY KEY (patient_id)  
                                                 )""")
         insert_patients = (
-            "INSERT INTO Patient(patient_id , fname, lname, email, phone_number, birth_date, age, sex, insurance_details) "
-            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            "INSERT INTO Patient(patient_id , fname, lname, email, phone_number, birth_date, age, sex, address, insurance_details) "
+            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         )
         populate_table(db_connection, db_cursor, insert_patients, "InitialData/Patient.csv")
 
@@ -116,36 +135,57 @@ def create_patient_table():
 create_patient_table()
 
 
+# appointment table
+def create_appointment_table():
+    table_name = "Appointment"
+    if not table_exists(table_name):
+        # Create Table
+        db_cursor.execute("""CREATE TABLE Appointment(appointment_id CHAR(6) NOT NULL,
+                                                        start_time TIME,
+                                                        end_time TIME,
+                                                        date DATE,
+                                                        doctor_id CHAR(6) NOT NULL,
+                                                        patient_id CHAR(6) NOT NULL,                                                     
+                                                        PRIMARY KEY (appointment_id),
+                                                        FOREIGN KEY (doctor_id) REFERENCES Doctor (doctor_id),
+                                                        FOREIGN KEY (patient_id) REFERENCES Patient (patient_id)
+                                                    )""")
 
+        insert_appointments = (
+            "INSERT INTO Appointment(appointment_id , start_time, end_time, date, doctor_id, patient_id) "
+            "VALUES (%s, %s, %s, %s, %s, %s)"
+        )
+        populate_table(db_connection, db_cursor, insert_appointments, "InitialData/Appointment.csv")
 
+create_appointment_table()  
 
+# record table
+def create_record_table():
+    table_name = "Record"
+    if not table_exists(table_name):
+        # Create Table
+        db_cursor.execute("""CREATE TABLE Record(doctor_id CHAR(6) NOT NULL,
+                                                 patient_id CHAR(6) NOT NULL,
+                                                 appointment_id CHAR(6) NOT NULL,
+                                                 medicine_id CHAR(6) NOT NULL,
+                                                 medicine_timing VARCHAR(50),
+                                                 medicine_amount VARCHAR(50),
+                                                 disease VARCHAR(50),
+                                                 PRIMARY KEY(doctor_id, patient_id, appointment_id, medicine_id),
+                                                 FOREIGN KEY (patient_id) REFERENCES Patient (patient_id),
+                                                 FOREIGN KEY (doctor_id) REFERENCES Doctor (doctor_id),
+                                                 FOREIGN KEY (appointment_id) REFERENCES Appointment (appointment_id)
+                                                )""")
 
+        insert_rooms = (
+            "INSERT INTO Record(doctor_id , patient_id, appointment_id, medicine_id, medicine_timing, medicine_amount, disease) "
+            "VALUES (%s, %s, %s, %s, %s, %s, %s)"
+        )
+        populate_table(db_connection, db_cursor, insert_rooms, "InitialData/Record.csv")
 
+create_record_table();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+####### STAFF AND NURSE CAN BE ADDED ############
 ########################## QUERIES ##########################
 
 # doctors list query
@@ -158,14 +198,6 @@ doctors_list = db_cursor.fetchall()
 db_cursor.execute("""SELECT *
                     FROM Administrator""")
 administrators_list = db_cursor.fetchall()
-
-
-
-
-
-
-
-
 
 
 ############################## METHODS #######################
@@ -194,6 +226,8 @@ def get_some_patients():
     # Execute SQL query to fetch patients from the database
     db_cursor.execute("SELECT * FROM Patient")
     patients_list = db_cursor.fetchall()
+    print(patients_list)
+
 
     # Default limit if not provided in the query parameter
     limit = int(request.args.get('limit', 5))
