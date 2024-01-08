@@ -1,22 +1,27 @@
-import {Component, OnInit} from '@angular/core';
-import {Doctor} from "../doctors-list/Doctor";
-import {DoctorsService} from "../doctors-list/doctors.service";
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Patient} from "./Patient";
 import {PatientsService} from "./patients.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-patient-list',
   templateUrl: './patient-list.component.html',
   styleUrls: ['./patient-list.component.css']
 })
-export class PatientListComponent implements OnInit{
+export class PatientListComponent implements OnInit, OnDestroy{
   patients: Patient[];
+  subscription: Subscription;
+  selectedEntries: number = 5;
 
   constructor(private patientsService: PatientsService) {
   }
 
   ngOnInit(): void {
-  this.patientsService.getPatients()
+    this.fetchPatients();
+  }
+
+  fetchPatients() {
+    this.subscription = this.patientsService.getPatients(this.selectedEntries)
     .subscribe((data: any[]) => {
       this.patients = data.map(patientData => {
         return new Patient(
@@ -33,5 +38,17 @@ export class PatientListComponent implements OnInit{
       });
       console.log(this.patients); // Ensure Doctor instances are created
     });
+  }
+
+  onEntriesChange(event: any): void {
+    this.selectedEntries = parseInt(event.target.value, 10);
+    // Fetch data based on selectedEntries when the dropdown value changes
+    this.fetchPatients();
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }

@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, request
 from flask_mysqldb import MySQL
 import mysql.connector
 import csv
@@ -159,10 +159,6 @@ db_cursor.execute("""SELECT *
                     FROM Administrator""")
 administrators_list = db_cursor.fetchall()
 
-# patients list query
-db_cursor.execute("""SELECT *
-                    FROM Patient""")
-patients_list = db_cursor.fetchall()
 
 
 
@@ -172,7 +168,7 @@ patients_list = db_cursor.fetchall()
 
 
 
-##############################
+############################## METHODS #######################
 @app.route('/')
 def hello_world():  # put application's code here
     return "Hello World"
@@ -193,10 +189,20 @@ def show_administrators():
     global administrators_list  # Assuming doctors_list is available globally
     return jsonify(administrators_list)
 
-@app.route('/api/patients')
-def show_patients():
-    global patients_list  # Assuming doctors_list is available globally
-    return jsonify(patients_list)
+@app.route('/api/patients', methods=['GET'])
+def get_some_patients():
+    # Execute SQL query to fetch patients from the database
+    db_cursor.execute("SELECT * FROM Patient")
+    patients_list = db_cursor.fetchall()
+
+    # Default limit if not provided in the query parameter
+    limit = int(request.args.get('limit', 5))
+
+    # Get the requested number of patients based on the limit
+    paginated_patients = patients_list[:limit]
+
+    return jsonify(paginated_patients)
+
 
 if __name__ == '__main__':
     app.run()
