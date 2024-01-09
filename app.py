@@ -12,7 +12,7 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 db_connection = mysql.connector.connect(
   host="localhost",
   user="root",
-  passwd="bbmsh899",
+  passwd="123678zulal",
   auth_plugin='mysql_native_password'
 )
 
@@ -87,51 +87,6 @@ def create_doctor_table():
         )
         populate_table(db_connection, db_cursor, insert_doctors, "InitialData/Doctors.csv")
 
-create_doctor_table()
-
-
-# administrator table
-def create_administrator_table():
-    table_name = "Administrator"
-    if not table_exists(table_name):
-        # Create Table
-        db_cursor.execute("""CREATE TABLE Administrator(admin_id CHAR(6) NOT NULL, 
-                                                         fname CHAR(50), 
-                                                         lname CHAR(50), 
-                                                         phone_number CHAR(11), 
-                                                         email CHAR(50), 
-                                                         PRIMARY KEY (admin_id))""")
-        insert_administrators = (
-            "INSERT INTO Administrator(admin_id, fname, lname, phone_number, email) "
-            "VALUES (%s, %s, %s, %s, %s)"
-        )
-        populate_table(db_connection, db_cursor, insert_administrators, "InitialData/Administrator.csv")
-
-create_administrator_table()
-
-
-# doctor table
-def create_doctor_table():
-    table_name = "Doctor"
-    if not table_exists(table_name):
-        # Create Table
-        db_cursor.execute("""CREATE TABLE Doctor(doctor_id CHAR(6) NOT NULL, 
-                                                   fname VARCHAR(50),
-                                                   lname VARCHAR(50),  
-                                                   gender CHAR(1), 
-                                                   specialization VARCHAR(50), 
-                                                   phone_number CHAR(11), 
-                                                   department_id CHAR(6), 
-                                                   email VARCHAR(50), 
-                                                   PRIMARY KEY (doctor_id),
-                                                   FOREIGN KEY (department_id) REFERENCES Department (department_id))""")
-        insert_doctors = (
-            "INSERT INTO Doctor(doctor_id, fname, lname, gender, specialization, phone_number, department_id, email) "
-            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
-        )
-        populate_table(db_connection, db_cursor, insert_doctors, "InitialData/Doctors.csv")
-
-#doctor specialization kaldıracak
 create_doctor_table()
 
 
