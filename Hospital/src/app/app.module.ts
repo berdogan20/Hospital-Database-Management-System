@@ -16,10 +16,6 @@ import { CreateAppointmentComponent } from './create-appointment/create-appointm
 import { AddDoctorComponent } from './add-doctor/add-doctor.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import {FormsModule} from "@angular/forms";
-import { MenuComponent } from './menu/menu.component';
-import { NursesListComponent } from './nurses-list/nurses-list.component';
-import { DepartmentsListComponent } from './departments-list/departments-list.component';
-import { AppointmentsListComponent } from './appointments-list/appointments-list.component';
 
 @NgModule({
   declarations: [
@@ -34,11 +30,7 @@ import { AppointmentsListComponent } from './appointments-list/appointments-list
     DoctorCommentComponent,
     CreateAppointmentComponent,
     AddDoctorComponent,
-    WelcomeComponent,
-    MenuComponent,
-    NursesListComponent,
-    DepartmentsListComponent,
-    AppointmentsListComponent
+    WelcomeComponent
   ],
   imports: [
     BrowserModule,
@@ -48,12 +40,8 @@ import { AppointmentsListComponent } from './appointments-list/appointments-list
     RouterModule.forRoot([
       { path: '', component: WelcomeComponent, pathMatch: 'full' },
       { path: 'welcome', component: WelcomeComponent },
-      { path: 'menu', component: MenuComponent },
       { path: 'doctors', component: DoctorsListComponent },
-      { path: 'patients', component: PatientListComponent},
-      { path: 'nurses', component: NursesListComponent},
-      { path: 'appointments', component: AppointmentsListComponent},
-      { path: 'departments', component: DepartmentsListComponent}
+      { path: 'patients', component: PatientListComponent}
     ])
   ],
   providers: [],
