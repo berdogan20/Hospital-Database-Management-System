@@ -92,7 +92,7 @@ def create_doctor_table():
         db_cursor.execute("""CREATE TABLE Doctor(doctor_id CHAR(6) NOT NULL, 
                                                    gender CHAR(1),                                                    
                                                    lname VARCHAR(50), 
-                                                   specialization VARCHAR(50), 
+                                                   specialization VARCHAR(50),
                                                    fname VARCHAR(50), 
                                                    department_id CHAR(6), 
                                                    phone_number CHAR(11), 
@@ -105,6 +105,7 @@ def create_doctor_table():
         )
         populate_table(db_connection, db_cursor, insert_doctors, "InitialData/Doctors.csv")
 
+#doctor specialization kaldıracak
 create_doctor_table()
 
 
@@ -226,8 +227,6 @@ def get_some_patients():
     # Execute SQL query to fetch patients from the database
     db_cursor.execute("SELECT * FROM Patient")
     patients_list = db_cursor.fetchall()
-    print(patients_list)
-
 
     # Default limit if not provided in the query parameter
     limit = int(request.args.get('limit', 5))
