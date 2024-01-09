@@ -1,0 +1,58 @@
+     <br>
+  <br>
+<div class="container">
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+
+
+
+    <!--doctor-->
+    <div class="col">
+      <div class="card" [routerLink]="['/doctors']">
+        <img src="./assets/doctor.png" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">Doctors</h5>
+        </div>
+      </div>
+    </div>
+
+    <!-- nurses -->
+    <div class="col">
+          <div class="card" [routerLink]="['/nurses']">
+            <img src="./assets/nurse.png" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">Nurses</h5>
+            </div>
+          </div>
+        </div>
+
+     <!-- departments -->
+    <div class="col">
+          <div class="card" [routerLink]="['/departments']">
+            <img src="./assets/department.png" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">Departments</h5>
+            </div>
+          </div>
+        </div>
+
+     <!-- appointments -->
+    <div class="col">
+          <div class="card" [routerLink]="['/appointments']">
+            <img src="./assets/appointment.png" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">Appointments</h5>
+            </div>
+          </div>
+        </div>
+
+    <!-- patients -->
+    <div class="col">
+          <div class="card" [routerLink]="['/patients']">
+            <img src="./assets/patient.png" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">Patients</h5>
+            </div>
+          </div>
+        </div>
+  </div>
+</div>
