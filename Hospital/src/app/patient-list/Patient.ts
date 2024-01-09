@@ -7,6 +7,7 @@ export class Patient {
     birthDate: Date;
     age: number;
     sex: string;
+    address: string;
     insuranceDetails: string;
 
     constructor(
@@ -18,6 +19,7 @@ export class Patient {
         birthDate: Date,
         age: number,
         sex: string,
+        address: string,
         insuranceDetails: string
     ) {
         this.patientId = patientId;
@@ -28,6 +30,7 @@ export class Patient {
         this.birthDate = birthDate;
         this.age = age;
         this.sex = sex;
+        this.address = address;
         this.insuranceDetails = insuranceDetails;
     }
 }
