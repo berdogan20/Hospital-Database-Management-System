@@ -7,6 +7,42 @@
         </div>
       </div>
     </div> <!-- Row end  -->
+    <div class="row">
+        <div class="col-md-4">
+          <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-6">
+              <!-- Specialization dropdown -->
+              <select class="form-select form-select-sm" [(ngModel)]="selectedSpecialization" (change)="onFilterChange()">
+                <option disabled selected >Specialization</option>
+                <option *ngFor="let specialization of specializations" [value]="specialization">{{ specialization }}</option>
+                <option value="All">All</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <!-- Gender dropdown -->
+              <select class="form-select form-select-sm" [(ngModel)]="selectedGender" (change)="onFilterChange()">
+                <option disabled selected>Gender</option>
+                <option value="Female">Female</option>
+                <option value="Male">Male</option>
+                <option value="All">All</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+
+        </div>
+        <div class="col-md-2 input-group-sm">
+          <input type="text" class="form-control" placeholder="First name" aria-label="Name" aria-describedby="button-addon2"
+            [(ngModel)]="selectedFname" (input)="onFnameChange($event.target.value)">
+        </div>
+        <div class="col-md-2 input-group-sm">
+          <input type="text" class="form-control" placeholder="Last name" aria-label="Name" aria-describedby="button-addon2"
+            [(ngModel)]="selectedLname" (input)="onLnameChange($event.target.value)">
+        </div>
+
+      </div>
     <div class="row g-3 row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 row-cols-xl-4 row-cols-xxl-4 row-deck py-1 pb-4">
       <ul *ngFor="let doctor of doctors">
         <li >
