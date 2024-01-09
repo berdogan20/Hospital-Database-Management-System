@@ -15,6 +15,7 @@ import { DoctorCommentComponent } from './doctor-comment/doctor-comment.componen
 import { CreateAppointmentComponent } from './create-appointment/create-appointment.component';
 import { AddDoctorComponent } from './add-doctor/add-doctor.component';
 import { WelcomeComponent } from './welcome/welcome.component';
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { WelcomeComponent } from './welcome/welcome.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

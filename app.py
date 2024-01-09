@@ -6,7 +6,8 @@ from flask import jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+CORS(app, resources={r"/*": {"origins": "*"}})
+
 
 db_connection = mysql.connector.connect(
   host="localhost",
@@ -19,7 +20,9 @@ mysql = MySQL(app)
 
 # creating database_cursor to perform SQL operation to run queries
 db_cursor = db_connection.cursor(buffered=True)
-db_cursor.execute("DROP DATABASE hospital")
+#db_cursor.execute("DROP DATABASE hospital")
+
+
 # executing cursor with execute method and pass SQL query
 db_cursor.execute("CREATE DATABASE IF NOT EXISTS hospital")
 
@@ -186,8 +189,7 @@ def create_record_table():
         )
         populate_table(db_connection, db_cursor, insert_rooms, "InitialData/Record.csv")
 
-create_record_table();
-
+create_record_table()
 ####### STAFF AND NURSE CAN BE ADDED ############ SHOULD BE ADDED, DO NOT FORGET TO CHANGE ER MODEL
 
 
@@ -214,7 +216,8 @@ create_record_table();
 
 
 
-
+db_cursor.execute("SELECT * FROM Patient")
+patients = db_cursor.fetchall()
 
 
 
@@ -223,16 +226,7 @@ create_record_table();
 
 ########################## QUERIES ##########################
 
-# doctors list query
-db_cursor.execute("""SELECT *
-                    FROM Doctor""")
-doctors_list = db_cursor.fetchall()
 
-
-# administrators list query
-db_cursor.execute("""SELECT *
-                    FROM Administrator""")
-administrators_list = db_cursor.fetchall()
 
 
 ############################## METHODS #######################
@@ -241,37 +235,55 @@ def hello_world():  # put application's code here
     return "Hello World"
 
 # Routes
-@app.route('/api/doctors')
-def show_doctors():
-    #return render_template('index.html', doctors_list=doctors_list)
-    # http://127.0.0.1:5000/doctors-list
-    global doctors_list  # Assuming doctors_list is available globally
-    return jsonify(doctors_list)
+@app.route('/api/doctors', methods=['GET'])
+def get_filtered_doctors():
+    global db_cursor
+
+    # Get the query parameter values
+    gender = request.args.get('gender')
+    specialization = request.args.get('specialization')
+
+    if gender and specialization:
+        db_cursor.execute("SELECT * FROM Doctor WHERE gender = %s AND specialization = %s", (gender, specialization,))
+    elif gender:
+        db_cursor.execute("SELECT * FROM Doctor WHERE gender = %s", (gender,))
+    elif specialization:
+        db_cursor.execute("SELECT * FROM Doctor WHERE specialization = %s", (specialization,))
+    else:
+        db_cursor.execute("SELECT * FROM Doctor")
+
+    filtered_doctors = db_cursor.fetchall()
+
+    response = jsonify(filtered_doctors)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+
+@app.route('/api/doctors', methods=['POST'])
+def add_doctor():
+    # Get the doctor data from the request
+    doctor_data = request.json  # Assuming data is sent as JSON
+
+    # Process the doctor data (e.g., store in database)
+    # Your logic to add a doctor to the database goes here
+
+    # Return a response (you can echo back the added data or a success message)
+    return jsonify({'message': 'Doctor added successfully', 'data': doctor_data}), 200
 
 
-@app.route('/api/administrators')
-def show_administrators():
-    #return render_template('index.html', administrators_list=administrators_list)
-    # http://127.0.0.1:5000/administrators-list
-    global administrators_list  # Assuming doctors_list is available globally
-    return jsonify(administrators_list)
 
 @app.route('/api/patients', methods=['GET'])
-def get_some_patients():
-    # Execute SQL query to fetch patients from the database
-    db_cursor.execute("SELECT * FROM Patient")
-    patients_list = db_cursor.fetchall()
-    print(patients_list)
-
+def get_patients():
+    global patients
 
     # Default limit if not provided in the query parameter
     limit = int(request.args.get('limit', 5))
 
     # Get the requested number of patients based on the limit
-    paginated_patients = patients_list[:limit]
+    paginated_patients = patients[:limit]
 
-    return jsonify(paginated_patients)
-
+    response = jsonify(paginated_patients)
+    response.headers.add('Access-Control-Allow-Origin', '*')  # Set CORS header
+    return response
 
 if __name__ == '__main__':
     app.run()
