@@ -11,7 +11,7 @@ CORS(app)  # Enable CORS for all routes
 db_connection = mysql.connector.connect(
   host="localhost",
   user="root",
-  passwd="123678zulal",
+  passwd="bbmsh899",
   auth_plugin='mysql_native_password'
 )
 
@@ -19,7 +19,7 @@ mysql = MySQL(app)
 
 # creating database_cursor to perform SQL operation to run queries
 db_cursor = db_connection.cursor(buffered=True)
-
+db_cursor.execute("DROP DATABASE hospital")
 # executing cursor with execute method and pass SQL query
 db_cursor.execute("CREATE DATABASE IF NOT EXISTS hospital")
 
@@ -47,6 +47,45 @@ def table_exists(table_name):
 
 ########################## CREATE TABLES ##########################
 
+#department table
+def create_department_table():
+    table_name = "Department"
+    if not table_exists(table_name):
+        #Create Table
+        db_cursor.execute("""CREATE TABLE Department(department_id CHAR(6) NOT NULL,  
+                                                      department_name VARCHAR(50) NOT NULL, 
+                                                      PRIMARY KEY (department_id))""")
+        insert_departments = (
+            "INSERT INTO Department(department_id, department_name)"
+            "VALUES (%s, %s)"
+        )
+        populate_table(db_connection, db_cursor, insert_departments, "InitialData/Department.csv")
+
+create_department_table()
+
+# doctor table
+def create_doctor_table():
+    table_name = "Doctor"
+    if not table_exists(table_name):
+        # Create Table
+        db_cursor.execute("""CREATE TABLE Doctor(doctor_id CHAR(6) NOT NULL, 
+                                                   fname VARCHAR(50),
+                                                   lname VARCHAR(50),  
+                                                   gender CHAR(1), 
+                                                   specialization VARCHAR(50), 
+                                                   phone_number CHAR(11), 
+                                                   department_id CHAR(6), 
+                                                   email VARCHAR(50), 
+                                                   PRIMARY KEY (doctor_id),
+                                                   FOREIGN KEY (department_id) REFERENCES Department (department_id))""")
+        insert_doctors = (
+            "INSERT INTO Doctor(doctor_id, fname, lname, gender, specialization, phone_number, department_id, email) "
+            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+        )
+        populate_table(db_connection, db_cursor, insert_doctors, "InitialData/Doctors.csv")
+
+create_doctor_table()
+
 
 # administrator table
 def create_administrator_table():
@@ -67,45 +106,9 @@ def create_administrator_table():
 
 create_administrator_table()
 
-#department table
-def create_department_table():
-    table_name = "Department"
-    if not table_exists(table_name):
-        #Create Table
-        db_cursor.execute("""CREATE TABLE Department(department_id CHAR(6) NOT NULL,  
-                                                      department_name VARCHAR(50) NOT NULL, 
-                                                      PRIMARY KEY (department_id))""")
-        insert_departments = (
-            "INSERT INTO Department(department_id, department_name)"
-            "VALUES (%s, %s)"
-        )
-        populate_table(db_connection, db_cursor, insert_departments, "InitialData/Department.csv")
-
-create_department_table()
 
 
 # doctors table
-def create_doctor_table():
-    table_name = "Doctor"
-    if not table_exists(table_name):
-        # Create Table
-        db_cursor.execute("""CREATE TABLE Doctor(doctor_id CHAR(6) NOT NULL, 
-                                                   gender CHAR(1),                                                    
-                                                   lname VARCHAR(50), 
-                                                   specialization VARCHAR(50), 
-                                                   fname VARCHAR(50), 
-                                                   department_id CHAR(6), 
-                                                   phone_number CHAR(11), 
-                                                   email VARCHAR(50), 
-                                                   PRIMARY KEY (doctor_id),
-                                                   FOREIGN KEY (department_id) REFERENCES Department (department_id))""")
-        insert_doctors = (
-            "INSERT INTO Doctor(doctor_id, gender, lname, specialization, fname, department_id, phone_number, email) "
-            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
-        )
-        populate_table(db_connection, db_cursor, insert_doctors, "InitialData/Doctors.csv")
-
-create_doctor_table()
 
 
 # patient table
@@ -185,7 +188,39 @@ def create_record_table():
 
 create_record_table();
 
-####### STAFF AND NURSE CAN BE ADDED ############
+####### STAFF AND NURSE CAN BE ADDED ############ SHOULD BE ADDED, DO NOT FORGET TO CHANGE ER MODEL
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ########################## QUERIES ##########################
 
 # doctors list query
