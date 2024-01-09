@@ -14,6 +14,8 @@ import { DoctorProfileComponent } from './doctor-profile/doctor-profile.componen
 import { DoctorCommentComponent } from './doctor-comment/doctor-comment.component';
 import { CreateAppointmentComponent } from './create-appointment/create-appointment.component';
 import { AddDoctorComponent } from './add-doctor/add-doctor.component';
+import { WelcomeComponent } from './welcome/welcome.component';
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -27,12 +29,14 @@ import { AddDoctorComponent } from './add-doctor/add-doctor.component';
     DoctorProfileComponent,
     DoctorCommentComponent,
     CreateAppointmentComponent,
-    AddDoctorComponent
+    AddDoctorComponent,
+    WelcomeComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

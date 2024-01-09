@@ -6,12 +6,13 @@ from flask import jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+CORS(app, resources={r"/*": {"origins": "*"}})
+
 
 db_connection = mysql.connector.connect(
   host="localhost",
   user="root",
-  passwd="123678zulal",
+  passwd="bbmsh899",
   auth_plugin='mysql_native_password'
 )
 
@@ -19,6 +20,8 @@ mysql = MySQL(app)
 
 # creating database_cursor to perform SQL operation to run queries
 db_cursor = db_connection.cursor(buffered=True)
+#db_cursor.execute("DROP DATABASE hospital")
+
 
 # executing cursor with execute method and pass SQL query
 db_cursor.execute("CREATE DATABASE IF NOT EXISTS hospital")
@@ -47,6 +50,45 @@ def table_exists(table_name):
 
 ########################## CREATE TABLES ##########################
 
+#department table
+def create_department_table():
+    table_name = "Department"
+    if not table_exists(table_name):
+        #Create Table
+        db_cursor.execute("""CREATE TABLE Department(department_id CHAR(6) NOT NULL,  
+                                                      department_name VARCHAR(50) NOT NULL, 
+                                                      PRIMARY KEY (department_id))""")
+        insert_departments = (
+            "INSERT INTO Department(department_id, department_name)"
+            "VALUES (%s, %s)"
+        )
+        populate_table(db_connection, db_cursor, insert_departments, "InitialData/Department.csv")
+
+create_department_table()
+
+# doctor table
+def create_doctor_table():
+    table_name = "Doctor"
+    if not table_exists(table_name):
+        # Create Table
+        db_cursor.execute("""CREATE TABLE Doctor(doctor_id CHAR(6) NOT NULL, 
+                                                   fname VARCHAR(50),
+                                                   lname VARCHAR(50),  
+                                                   gender CHAR(1), 
+                                                   specialization VARCHAR(50), 
+                                                   phone_number CHAR(11), 
+                                                   department_id CHAR(6), 
+                                                   email VARCHAR(50), 
+                                                   PRIMARY KEY (doctor_id),
+                                                   FOREIGN KEY (department_id) REFERENCES Department (department_id))""")
+        insert_doctors = (
+            "INSERT INTO Doctor(doctor_id, fname, lname, gender, specialization, phone_number, department_id, email) "
+            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+        )
+        populate_table(db_connection, db_cursor, insert_doctors, "InitialData/Doctors.csv")
+
+create_doctor_table()
+
 
 # administrator table
 def create_administrator_table():
@@ -67,46 +109,54 @@ def create_administrator_table():
 
 create_administrator_table()
 
-#department table
-def create_department_table():
-    table_name = "Department"
-    if not table_exists(table_name):
-        #Create Table
-        db_cursor.execute("""CREATE TABLE Department(department_id CHAR(6) NOT NULL,  
-                                                      department_name VARCHAR(50) NOT NULL, 
-                                                      PRIMARY KEY (department_id))""")
-        insert_departments = (
-            "INSERT INTO Department(department_id, department_name)"
-            "VALUES (%s, %s)"
-        )
-        populate_table(db_connection, db_cursor, insert_departments, "InitialData/Department.csv")
 
-create_department_table()
-
-
-# doctors table
+# doctor table
 def create_doctor_table():
     table_name = "Doctor"
     if not table_exists(table_name):
         # Create Table
         db_cursor.execute("""CREATE TABLE Doctor(doctor_id CHAR(6) NOT NULL, 
-                                                   gender CHAR(1),                                                    
-                                                   lname VARCHAR(50), 
-                                                   specialization VARCHAR(50),
-                                                   fname VARCHAR(50), 
-                                                   department_id CHAR(6), 
+                                                   fname VARCHAR(50),
+                                                   lname VARCHAR(50),  
+                                                   gender CHAR(1), 
+                                                   specialization VARCHAR(50), 
                                                    phone_number CHAR(11), 
+                                                   department_id CHAR(6), 
                                                    email VARCHAR(50), 
                                                    PRIMARY KEY (doctor_id),
                                                    FOREIGN KEY (department_id) REFERENCES Department (department_id))""")
         insert_doctors = (
-            "INSERT INTO Doctor(doctor_id, gender, lname, specialization, fname, department_id, phone_number, email) "
+            "INSERT INTO Doctor(doctor_id, fname, lname, gender, specialization, phone_number, department_id, email) "
             "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
         )
         populate_table(db_connection, db_cursor, insert_doctors, "InitialData/Doctors.csv")
 
 #doctor specialization kaldıracak
 create_doctor_table()
+
+
+# administrator table
+def create_administrator_table():
+    table_name = "Administrator"
+    if not table_exists(table_name):
+        # Create Table
+        db_cursor.execute("""CREATE TABLE Administrator(admin_id CHAR(6) NOT NULL, 
+                                                         fname CHAR(50), 
+                                                         lname CHAR(50), 
+                                                         phone_number CHAR(11), 
+                                                         email CHAR(50), 
+                                                         PRIMARY KEY (admin_id))""")
+        insert_administrators = (
+            "INSERT INTO Administrator(admin_id, fname, lname, phone_number, email) "
+            "VALUES (%s, %s, %s, %s, %s)"
+        )
+        populate_table(db_connection, db_cursor, insert_administrators, "InitialData/Administrator.csv")
+
+create_administrator_table()
+
+
+
+# doctors table
 
 
 # patient table
@@ -184,21 +234,44 @@ def create_record_table():
         )
         populate_table(db_connection, db_cursor, insert_rooms, "InitialData/Record.csv")
 
-create_record_table();
+create_record_table()
+####### STAFF AND NURSE CAN BE ADDED ############ SHOULD BE ADDED, DO NOT FORGET TO CHANGE ER MODEL
 
-####### STAFF AND NURSE CAN BE ADDED ############
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db_cursor.execute("SELECT * FROM Patient")
+patients = db_cursor.fetchall()
+
+
+
+
+
+
 ########################## QUERIES ##########################
 
-# doctors list query
-db_cursor.execute("""SELECT *
-                    FROM Doctor""")
-doctors_list = db_cursor.fetchall()
 
-
-# administrators list query
-db_cursor.execute("""SELECT *
-                    FROM Administrator""")
-administrators_list = db_cursor.fetchall()
 
 
 ############################## METHODS #######################
@@ -207,35 +280,55 @@ def hello_world():  # put application's code here
     return "Hello World"
 
 # Routes
-@app.route('/api/doctors')
-def show_doctors():
-    #return render_template('index.html', doctors_list=doctors_list)
-    # http://127.0.0.1:5000/doctors-list
-    global doctors_list  # Assuming doctors_list is available globally
-    return jsonify(doctors_list)
+@app.route('/api/doctors', methods=['GET'])
+def get_filtered_doctors():
+    global db_cursor
+
+    # Get the query parameter values
+    gender = request.args.get('gender')
+    specialization = request.args.get('specialization')
+
+    if gender and specialization:
+        db_cursor.execute("SELECT * FROM Doctor WHERE gender = %s AND specialization = %s", (gender, specialization,))
+    elif gender:
+        db_cursor.execute("SELECT * FROM Doctor WHERE gender = %s", (gender,))
+    elif specialization:
+        db_cursor.execute("SELECT * FROM Doctor WHERE specialization = %s", (specialization,))
+    else:
+        db_cursor.execute("SELECT * FROM Doctor")
+
+    filtered_doctors = db_cursor.fetchall()
+
+    response = jsonify(filtered_doctors)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+
+@app.route('/api/doctors', methods=['POST'])
+def add_doctor():
+    # Get the doctor data from the request
+    doctor_data = request.json  # Assuming data is sent as JSON
+
+    # Process the doctor data (e.g., store in database)
+    # Your logic to add a doctor to the database goes here
+
+    # Return a response (you can echo back the added data or a success message)
+    return jsonify({'message': 'Doctor added successfully', 'data': doctor_data}), 200
 
 
-@app.route('/api/administrators')
-def show_administrators():
-    #return render_template('index.html', administrators_list=administrators_list)
-    # http://127.0.0.1:5000/administrators-list
-    global administrators_list  # Assuming doctors_list is available globally
-    return jsonify(administrators_list)
 
 @app.route('/api/patients', methods=['GET'])
-def get_some_patients():
-    # Execute SQL query to fetch patients from the database
-    db_cursor.execute("SELECT * FROM Patient")
-    patients_list = db_cursor.fetchall()
+def get_patients():
+    global patients
 
     # Default limit if not provided in the query parameter
     limit = int(request.args.get('limit', 5))
 
     # Get the requested number of patients based on the limit
-    paginated_patients = patients_list[:limit]
+    paginated_patients = patients[:limit]
 
-    return jsonify(paginated_patients)
-
+    response = jsonify(paginated_patients)
+    response.headers.add('Access-Control-Allow-Origin', '*')  # Set CORS header
+    return response
 
 if __name__ == '__main__':
     app.run()
