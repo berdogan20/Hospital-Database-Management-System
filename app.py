@@ -4,6 +4,8 @@ import mysql.connector
 import csv
 from flask import jsonify
 from flask_cors import CORS
+from datetime import timedelta
+
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -12,7 +14,7 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 db_connection = mysql.connector.connect(
   host="localhost",
   user="root",
-  passwd="123678zulal",
+  passwd="bbmsh899",
   auth_plugin='mysql_native_password'
 )
 
@@ -165,31 +167,10 @@ def create_appointment_table():
 
 create_appointment_table()  
 
-# record table
-def create_record_table():
-    table_name = "Record"
-    if not table_exists(table_name):
-        # Create Table
-        db_cursor.execute("""CREATE TABLE Record(doctor_id CHAR(6) NOT NULL,
-                                                 patient_id CHAR(6) NOT NULL,
-                                                 appointment_id CHAR(6) NOT NULL,
-                                                 medicine_id CHAR(6) NOT NULL,
-                                                 medicine_timing VARCHAR(50),
-                                                 medicine_amount VARCHAR(50),
-                                                 disease VARCHAR(50),
-                                                 PRIMARY KEY(doctor_id, patient_id, appointment_id, medicine_id),
-                                                 FOREIGN KEY (patient_id) REFERENCES Patient (patient_id),
-                                                 FOREIGN KEY (doctor_id) REFERENCES Doctor (doctor_id),
-                                                 FOREIGN KEY (appointment_id) REFERENCES Appointment (appointment_id)
-                                                )""")
 
-        insert_rooms = (
-            "INSERT INTO Record(doctor_id , patient_id, appointment_id, medicine_id, medicine_timing, medicine_amount, disease) "
-            "VALUES (%s, %s, %s, %s, %s, %s, %s)"
-        )
-        populate_table(db_connection, db_cursor, insert_rooms, "InitialData/Record.csv")
 
-create_record_table()
+
+
 ####### STAFF AND NURSE CAN BE ADDED ############ SHOULD BE ADDED, DO NOT FORGET TO CHANGE ER MODEL
 
 
@@ -284,6 +265,61 @@ def get_patients():
     response = jsonify(paginated_patients)
     response.headers.add('Access-Control-Allow-Origin', '*')  # Set CORS header
     return response
+
+
+@app.route('/api/appointments', methods=['GET'])
+def get_appointments():
+    global db_cursor
+
+    # Fetch query parameters for filtering
+    date = request.args.get('date')
+    doctor_fname = request.args.get('doctor_fname')
+    start_time = request.args.get('start_time')
+    end_time = request.args.get('end_time')
+
+    # Construct the base query
+    query = "SELECT * FROM Appointment WHERE 1"
+
+    # Prepare parameters for the query
+    params = []
+
+    # Check and add filters to the query
+    if date:
+        query += " AND date = %s"
+        params.append(date)
+    if doctor_fname:
+        query += " AND doctor_id IN (SELECT doctor_id FROM Doctor WHERE fname = %s)"
+        params.append(doctor_fname)
+    if start_time:
+        query += " AND start_time >= %s"
+        params.append(start_time)
+    if end_time:
+        query += " AND end_time <= %s"
+        params.append(end_time)
+
+    # Execute the query with filters (if any)
+    if params:
+        db_cursor.execute(query, tuple(params))
+    else:
+        db_cursor.execute(query)
+
+    appointments = db_cursor.fetchall()
+
+    def serialize_timedelta(obj):
+        if isinstance(obj, timedelta):
+            return str(obj)  # Convert timedelta to string before serialization
+        return obj  # Return the object unchanged if it's not a timedelta
+
+    # Assuming appointments is a list of tuples fetched from the database
+    # Convert timedelta objects in appointments tuples
+    appointments = [dict(zip(db_cursor.column_names, (serialize_timedelta(field) for field in row))) for row in
+                    appointments]
+
+    # Now jsonify your updated appointments list
+    response = jsonify(appointments)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+
 
 if __name__ == '__main__':
     app.run()

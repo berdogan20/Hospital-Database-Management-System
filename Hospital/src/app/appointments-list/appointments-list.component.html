@@ -1,1 +1,137 @@
-<p>appointments-list works!</p>
+<div class="body d-flex py-3">
+  <div class="container-xxl">
+    <div class="row align-items-center">
+      <div class="border-0 mb-4">
+        <div
+          class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+          <h3 class="fw-bold mb-0">Appointments List</h3>
+        </div>
+      </div>
+    </div> <!-- Row end  -->
+    <div class="row mb-3">
+      <div class="card">
+        <div class="card-body">
+          <div id="patient-table_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
+            <div class="row">
+              <div class="col-sm-12">
+
+
+                <!-- filters -->
+                <div class="row">
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <label for="doctorName">Doctor Name:</label>
+                      <input type="text" id="doctorName" [(ngModel)]="filters.doctorName" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <label for="date">Date:</label>
+                      <input type="date" id="date" [(ngModel)]="filters.date" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <label for="startTime">Start Time:</label>
+                      <input type="time" id="startTime" [(ngModel)]="filters.startTime" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <label for="endTime">End Time:</label>
+                      <input type="time" id="endTime" [(ngModel)]="filters.endTime" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <br>
+                      <button (click)="applyFilters()" class="btn btn-primary ">Apply Filters</button>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <br>
+                      <button (click)="clearFilters()" class="btn btn-secondary">Clear Filters</button>
+                    </div>
+                  </div>
+                </div>
+                <br>
+
+                <!-- table -->
+                <table id="appointment-table"
+                       class="table table-hover align-middle mb-0 nowrap dataTable no-footer dtr-inline"
+                       style="width: 100%;" role="grid" aria-describedby="appointment-table_info">
+                  <thead>
+                  <tr role="row">
+                    <th class="sorting_asc" style="width: 275.2px;" aria-label="Id: activate to sort column descending">
+                      Id
+                    </th>
+                    <th class="sorting" style="width: 500.2px;" aria-label="Date: activate to sort column ascending">
+                      Date
+                    </th>
+                    <th class="sorting" style="width: 227.2px;"
+                        aria-label="Start Time: activate to sort column ascending">
+                      Start Time
+                    </th>
+                    <th class="sorting" style="width: 0px;" aria-label="End Time: activate to sort column ascending">
+                      End Time
+                    </th>
+                    <th class="sorting" style="width: 0px;" aria-label="Patient ID: activate to sort column ascending">
+                      Patient ID
+                    </th>
+                    <th class="sorting" style="width: 0px;" aria-label="Doctor ID: activate to sort column ascending">
+                      Doctor ID
+                    </th>
+                  </tr>
+
+
+
+                  </thead>
+                  <tbody *ngFor="let appointment of appointments">
+                  <tr role="row" class="odd">
+                    <td tabindex="0" class="sorting_1">{{ appointment.appointment_id }}</td>
+                    <td tabindex="0" class="sorting_1">{{ appointment.date }}</td>
+                    <td>{{ appointment.start_time }}</td>
+                    <td>{{ appointment.end_time }}</td>
+                    <td>{{ appointment.patient_id }}
+                    <td>{{ appointment.doctor_id }}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12 col-md-5">
+                <div class="dataTables_info" id="patient-table_info" role="status" aria-live="polite">Showing 1 to 10 of
+                  10 entries
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-7">
+                <div class="dataTables_paginate paging_simple_numbers" id="patient-table_paginate">
+                  <ul class="pagination">
+                    <li class="paginate_button page-item previous disabled" id="patient-table_previous"><a href="#"
+                                                                                                           aria-controls="patient-table"
+                                                                                                           data-dt-idx="0"
+                                                                                                           tabindex="0"
+                                                                                                           class="page-link">Previous</a>
+                    </li>
+                    <li class="paginate_button page-item active"><a href="#" aria-controls="patient-table"
+                                                                    data-dt-idx="1" tabindex="0" class="page-link">1</a>
+                    </li>
+                    <li class="paginate_button page-item next disabled" id="patient-table_next"><a href="#"
+                                                                                                   aria-controls="patient-table"
+                                                                                                   data-dt-idx="2"
+                                                                                                   tabindex="0"
+                                                                                                   class="page-link">Next</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
