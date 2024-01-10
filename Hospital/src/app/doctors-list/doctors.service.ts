@@ -7,26 +7,16 @@ import {Doctor} from "./Doctor";
   providedIn: 'root'
 })
 export class DoctorsService {
-  private apiUrl = 'http://127.0.0.1:5000/api/doctors'; // Your Flask API URL
+   private apiUrl = 'http://127.0.0.1:5000/api/doctors';
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) { }
-
-  getDoctors(gender?: string, specialization?: string): Observable<Doctor[]> {
-    let url = this.apiUrl;
-
-    // Check and construct the URL with query parameters if applicable
-    if (gender && specialization) {
-      url += `?gender=${gender}&specialization=${specialization}`;
-    } else if (gender) {
-      url += `?gender=${gender}`;
-    } else if (specialization) {
-      url += `?specialization=${specialization}`;
-    }
-
-    return this.http.get<Doctor[]>(url);
+  getDoctors(filters: any): Observable<any[]> {
+  // Use HttpClient to make GET request with filters
+  return this.http.get<any[]>(this.apiUrl, { params: filters });
   }
+
+
   addDoctor(newDoctor: Doctor): Observable<Doctor> {
     return this.http.post<Doctor>(this.apiUrl, newDoctor);
   }
-
 }

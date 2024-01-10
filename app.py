@@ -49,7 +49,6 @@ def table_exists(table_name):
     return db_cursor.fetchone() is not None
 
 
-
 ########################## CREATE TABLES ##########################
 
 #department table
@@ -217,25 +216,53 @@ def hello_world():  # put application's code here
 
 # Routes
 @app.route('/api/doctors', methods=['GET'])
-def get_filtered_doctors():
+def get_doctors():
     global db_cursor
 
-    # Get the query parameter values
+    # Fetch query parameters for filtering
+    fname = request.args.get('fname')
+    lname = request.args.get('lname')
     gender = request.args.get('gender')
-    specialization = request.args.get('specialization')
+    department = request.args.get('department')
 
-    if gender and specialization:
-        db_cursor.execute("SELECT * FROM Doctor WHERE gender = %s AND specialization = %s", (gender, specialization,))
-    elif gender:
-        db_cursor.execute("SELECT * FROM Doctor WHERE gender = %s", (gender,))
-    elif specialization:
-        db_cursor.execute("SELECT * FROM Doctor WHERE specialization = %s", (specialization,))
+    # Construct the base query
+    query = "SELECT * FROM Doctor WHERE 1"
+
+    # Prepare parameters for the query
+    params = []
+
+    # Check and add filters to the query
+    if fname:
+        query += " AND fname LIKE %s"
+        params.append(f"{fname}%")  # Add '%' for partial match
+    if lname:
+        query += " AND lname LIKE %s"
+        params.append(f"{lname}%")  # Add '%' for partial match
+    if gender:
+        query += " AND gender = %s"
+        params.append(gender)
+    if department:
+        query += " AND department_id IN (SELECT department_id FROM Department WHERE department_name = %s)"
+        params.append(department)
+
+    # Execute the query with filters (if any)
+    if params:
+        db_cursor.execute(query, tuple(params))
     else:
-        db_cursor.execute("SELECT * FROM Doctor")
+        db_cursor.execute(query)
 
-    filtered_doctors = db_cursor.fetchall()
+    doctors = db_cursor.fetchall()
 
-    response = jsonify(filtered_doctors)
+    def serialize_timedelta(obj):
+        if isinstance(obj, timedelta):
+            return str(obj)
+        return obj
+
+    doctors = [dict(zip(db_cursor.column_names, (serialize_timedelta(field) for field in row))) for row in
+                    doctors]
+
+    # Now jsonify your updated appointments list
+    response = jsonify(doctors)
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
@@ -319,6 +346,7 @@ def get_appointments():
     response = jsonify(appointments)
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
+
 
 
 if __name__ == '__main__':

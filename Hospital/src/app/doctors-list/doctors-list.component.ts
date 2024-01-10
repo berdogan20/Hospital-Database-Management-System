@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {DoctorsService} from "./doctors.service";
-import {Doctor} from "./Doctor";
-import {Observable, Subscription} from "rxjs";
 import {specializations} from "./specializations";
 
 @Component({
@@ -10,77 +8,31 @@ import {specializations} from "./specializations";
   styleUrls: ['./doctors-list.component.css']
 })
 export class DoctorsListComponent implements OnInit {
-  doctors: Doctor[];
-  subscription: Subscription;
-  specializations: string[] = specializations;
-  selectedSpecialization: string = '';
-  selectedGender: string = '';
-  selectedFname: string = '';
-  selectedLname: string = '';
-  constructor(private doctorsService: DoctorsService) {
-  }
+  doctors: any[] = [];
+  departments: string[] = specializations;
+  filters: any = {}; // Define filters here
 
-  ngOnInit(): void {
+  constructor(private doctorsService: DoctorsService) {}
+  ngOnInit() {
+    this.filters = {}; // Initialize filters
     this.fetchDoctors();
   }
-  fetchDoctors(): void {
-
-    var gender = '';
-    if (this.selectedGender == 'Female') {
-      gender = "F"
-    }
-    else if (this.selectedGender == 'Male') {
-      gender = "M"
-    }
-    else {
-      gender = ''
-    }
-    var specialization = '';
-    if (this.selectedSpecialization == 'All') {
-      specialization = ''
-    }
-    else {
-      specialization = this.selectedSpecialization
-    }
-
-    this.subscription = this.doctorsService.getDoctors(gender, specialization)
+  fetchDoctors() {
+    this.doctorsService.getDoctors(this.filters)
       .subscribe((data: any[]) => {
-        this.doctors = data.map(doctorData => {
-          return new Doctor(
-            doctorData[0], // doctor_id
-            doctorData[1], // gender
-            doctorData[2], // lname
-            doctorData[3], // specialization
-            doctorData[4], // fname
-            doctorData[5], // department_id
-            doctorData[6], // email
-            doctorData[7]  // phone_number
-          );
-        });
-        console.log(this.doctors); // Ensure Doctor instances are created
+        this.doctors = data;
       });
+    console.log(this.doctors)
+  }
+  applyFilters() {
+    // Call fetchAppointments to apply updated filters
+    this.fetchDoctors();
   }
 
-onFilterChange(): void {
-  this.fetchDoctors();
-}
-
-  ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+  clearFilters() {
+    this.filters = {}; // Reset filters
+    this.fetchDoctors(); // Fetch doctors without filters
   }
-
-  onFnameChange(value: string): void {
-    this.selectedFname = value;
-
-  }
-
-  onLnameChange(value: string): void {
-    this.selectedLname = value;
-  }
-
-
 
 
 }

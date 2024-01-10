@@ -2,55 +2,123 @@
   <div class="container-xxl">
     <div class="row align-items-center">
       <div class="border-0 mb-4">
-        <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
-          <h3 class="fw-bold mb-0">Doctor List </h3>
+        <div
+          class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+          <h3 class="fw-bold mb-0">Doctors List</h3>
         </div>
       </div>
     </div> <!-- Row end  -->
-    <div class="row">
-        <div class="col-md-4">
-          <div class="col-md-12">
-          <div class="row">
-            <div class="col-md-6">
-              <!-- Specialization dropdown -->
-              <select class="form-select form-select-sm" [(ngModel)]="selectedSpecialization" (change)="onFilterChange()">
-                <option disabled selected >Specialization</option>
-                <option *ngFor="let specialization of specializations" [value]="specialization">{{ specialization }}</option>
-                <option value="All">All</option>
-              </select>
-            </div>
-            <div class="col-md-6">
-              <!-- Gender dropdown -->
-              <select class="form-select form-select-sm" [(ngModel)]="selectedGender" (change)="onFilterChange()">
-                <option disabled selected>Gender</option>
-                <option value="Female">Female</option>
-                <option value="Male">Male</option>
-                <option value="All">All</option>
-              </select>
+    <div class="row mb-3">
+      <div class="card">
+        <div class="card-body">
+          <div id="patient-table_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
+            <div class="row">
+              <div class="col-sm-12">
+
+                <!-- filters -->
+                <div class="row">
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <label for="department">Department</label>
+                      <!-- Specialization dropdown -->
+                      <select id="department" class="form-select form-select-sm"
+                              [(ngModel)]="filters.department">
+                        <option disabled selected>Department</option>
+                        <option *ngFor="let department of departments"
+                                [value]="department">{{ department }}
+                        </option>
+                        <option value="">All</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <label for="fname">First Name</label>
+                       <input type="text" id="fname" [(ngModel)]="filters.fname" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <label for="lname">Last Name</label>
+                      <input type="text" id="lname" [(ngModel)]="filters.lname" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <label for="gender">Gender</label>
+                      <!-- Gender dropdown -->
+                      <select id="gender" class="form-select form-select-sm" [(ngModel)]="filters.gender">
+                        <option disabled selected>Gender</option>
+                        <option value="Female">Female</option>
+                        <option value="Male">Male</option>
+                        <option value="">All</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <br>
+                      <button (click)="applyFilters()" class="btn btn-primary ">Apply Filters</button>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <br>
+                      <button (click)="clearFilters()" class="btn btn-secondary">Clear Filters</button>
+                    </div>
+                  </div>
+                </div>
+
+                <br>
+
+
+                <!-- table -->
+                  <div
+                    class="row g-3 row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 row-cols-xl-4 row-cols-xxl-4 row-deck py-1 pb-4">
+                    <ul *ngFor="let doctor of doctors">
+                      <li>
+                        <div class="col">
+                          <div class="card teacher-card ">
+                            <div class="card-body d-flex flex-column">
+                              <div class="profile-av mx-auto text-center w220">
+                                <img src="assets/avatar.png" alt="" class="avatar xl rounded-circle img-thumbnail shadow-sm">
+                                <div class="about-info d-flex align-items-center mt-3 justify-content-center">
+                                  <div class="followers rounded-circle me-3">
+                                    <a href="#">
+                                      <i class="bi bi-facebook fs-5 text-blue"></i>
+                                    </a>
+                                  </div>
+                                  <div class="own-video rounded-circle me-3">
+                                    <a href="#">
+                                      <i class="bi bi-instagram fs-5 text-danger"></i>
+                                    </a>
+                                  </div>
+                                  <div class="star rounded-circle ">
+                                    <a href="#">
+                                      <i class="bi bi-linkedin fs-5 text-blue"></i>
+                                    </a>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="teacher-info  w-100 text-center mt-3">
+                                <h6  class="mb-2 mt-2  fw-bold d-block fs-6">Dr. {{ doctor.fname }} {{ doctor.lname }} </h6>
+                                <span class="light-info-bg py-2 px-2 rounded-1 d-inline-block fw-bold small-11 mb-0 mt-1">{{ doctor.specialization }}</span>
+                                <!--<div><a href="doctor-profile.html" class="btn btn-primary btn-sm">Profile</a></div>-->
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+
+
+              </div>
             </div>
           </div>
         </div>
-
-
-        </div>
-        <!--<div class="col-md-2 input-group-sm">
-          <input type="text" class="form-control" placeholder="First name" aria-label="Name" aria-describedby="button-addon2"
-            [(ngModel)]="selectedFname" (input)="onFnameChange($event.target.value)">
-        </div>
-        <div class="col-md-2 input-group-sm">
-          <input type="text" class="form-control" placeholder="Last name" aria-label="Name" aria-describedby="button-addon2"
-            [(ngModel)]="selectedLname" (input)="onLnameChange($event.target.value)">
-        </div>-->
-
       </div>
-    <br>
-    <div class="row g-3 row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 row-cols-xl-4 row-cols-xxl-4 row-deck py-1 pb-4">
-      <ul *ngFor="let doctor of doctors">
-        <li >
-           <app-doctors-list-item [doctor]="doctor"></app-doctors-list-item>
-        </li>
-      </ul>
     </div>
   </div>
 </div>
-
