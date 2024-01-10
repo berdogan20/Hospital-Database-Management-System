@@ -196,12 +196,6 @@ create_appointment_table()
 
 
 
-db_cursor.execute("SELECT * FROM Patient")
-patients = db_cursor.fetchall()
-
-
-
-
 
 
 ########################## QUERIES ##########################
@@ -281,16 +275,56 @@ def add_doctor():
 
 @app.route('/api/patients', methods=['GET'])
 def get_patients():
-    global patients
+    global db_cursor
 
-    # Default limit if not provided in the query parameter
-    limit = int(request.args.get('limit', 5))
+    # Fetch query parameters for filtering
+    fname = request.args.get('fname')
+    lname = request.args.get('lname')
+    sex = request.args.get('sex')
+    age = request.args.get('age')
+    insurance_details = request.args.get('insurance_details')
 
-    # Get the requested number of patients based on the limit
-    paginated_patients = patients[:limit]
+    # Construct the base query
+    query = "SELECT * FROM Patient WHERE 1"
 
-    response = jsonify(paginated_patients)
-    response.headers.add('Access-Control-Allow-Origin', '*')  # Set CORS header
+    # Prepare parameters for the query
+    params = []
+
+    # Check and add filters to the query
+    if fname:
+        query += " AND fname LIKE %s"
+        params.append(f"{fname}%")  # Add '%' for partial match
+    if lname:
+        query += " AND lname LIKE %s"
+        params.append(f"{lname}%")  # Add '%' for partial match
+    if insurance_details:
+        query += " AND insurance_details LIKE %s"
+        params.append(f"{insurance_details}%")  # Add '%' for partial match
+    if sex:
+        query += " AND sex = %s"
+        params.append(sex)
+    if age:
+        query += " AND age = %s"
+        params.append(age)
+
+    # Execute the query with filters (if any)
+    if params:
+        db_cursor.execute(query, tuple(params))
+    else:
+        db_cursor.execute(query)
+
+    patients = db_cursor.fetchall()
+
+    def serialize_timedelta(obj):
+        if isinstance(obj, timedelta):
+            return str(obj)
+        return obj
+
+    patients = [dict(zip(db_cursor.column_names, (serialize_timedelta(field) for field in row))) for row in patients]
+
+    # Now jsonify your updated patients list
+    response = jsonify(patients)
+    response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
 

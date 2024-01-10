@@ -9,14 +9,11 @@ import { Patient } from "./Patient";
 export class PatientsService {
   private apiUrl = 'http://127.0.0.1:5000/api/patients';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  getPatients(entriesPerPage: number): Observable<Patient[]> {
-    // Create query parameters to pass the 'entriesPerPage' value
-    const params = new HttpParams().set('limit', entriesPerPage.toString());
-
-    // Use the query parameters in the HTTP request
-    return this.http.get<Patient[]>(this.apiUrl, { params });
+  getPatients(filters: any): Observable<any[]> {
+  // Use HttpClient to make GET request with filters
+  return this.http.get<any[]>(this.apiUrl, { params: filters });
   }
 }
 
