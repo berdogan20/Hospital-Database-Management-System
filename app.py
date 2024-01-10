@@ -12,7 +12,7 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 db_connection = mysql.connector.connect(
   host="localhost",
   user="root",
-  passwd="bbmsh899",
+  passwd="123678zulal",
   auth_plugin='mysql_native_password'
 )
 
