@@ -1,31 +1,31 @@
-doctor_id
-DOC001
-DOC002
-DOC003
-DOC004
-DOC005
-DOC006
-DOC007
-DOC008
-DOC009
-DOC010
-DOC011
-DOC012
-DOC013
-DOC014
-DOC015
-DOC016
-DOC017
-DOC018
-DOC019
-DOC020
-DOC021
-DOC022
-DOC023
-DOC024
-DOC025
-DOC026
-DOC027
-DOC028
-DOC029
-DOC030
+doctor_id,title
+DOC001,Professor
+DOC002,Specialist
+DOC003,Assistant Professor
+DOC004,Ordinarius
+DOC005,General Practitioner
+DOC006,Docent
+DOC007,Specialist
+DOC008,Assistant Professor
+DOC009,General Practitioner
+DOC010,Specialist
+DOC011,Professor
+DOC012,Ordinarius
+DOC013,Assistant Professor
+DOC014,Specialist
+DOC015,Assistant Professor
+DOC016,Professor
+DOC017,Docent
+DOC018,Ordinarius
+DOC019,Assistant Professor
+DOC020,General Practitioner
+DOC021,Specialist
+DOC022,Ordinarius
+DOC023,Assistant Professor
+DOC024,Professor
+DOC025,Specialist
+DOC026,Docent
+DOC027,Professor
+DOC028,Specialist
+DOC029,Assistant Professor
+DOC030,General Practitioner
