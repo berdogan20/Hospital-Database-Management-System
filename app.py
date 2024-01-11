@@ -208,6 +208,41 @@ create_appointment_table()
 def hello_world():  # put application's code here
     return "Hello World"
 
+@app.route('/api/departments', methods=['GET'])
+def get_departments():
+    global db_cursor
+
+    # Fetch query parameters for filtering
+    department_id = request.args.get('department_id')
+    department_name = request.args.get('department_name')
+
+    # Construct the base query
+    query = "SELECT * FROM Department WHERE 1"
+
+    # Prepare parameters for the query
+    params = []
+
+    # Check and add filters to the query
+    if department_id:
+        query += " AND department_id = %s"
+        params.append(department_id)
+    if department_name:
+        query += " AND department_name LIKE %s"
+        params.append(f"{department_name}%")  # Add '%' for partial match
+
+    # Execute the query with filters (if any)
+    if params:
+        db_cursor.execute(query, tuple(params))
+    else:
+        db_cursor.execute(query)
+
+    departments = db_cursor.fetchall()
+
+    # Now jsonify your departments list
+    response = jsonify(departments)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+
 # Routes
 @app.route('/api/doctors', methods=['GET'])
 def get_doctors():
