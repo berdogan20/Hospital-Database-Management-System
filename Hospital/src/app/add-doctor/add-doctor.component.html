@@ -14,7 +14,7 @@
             <h6 class="mb-0 fw-bold ">Doctor Basic Information</h6>
           </div>
           <div class="card-body">
-            <form (ngSubmit)="onSubmitNewDoctor()">
+            <form>
               <div class="row g-3 align-items-center">
                 <div class="col-md-6">
                   <label for="firstname" class="form-label">First Name</label>
@@ -37,7 +37,7 @@
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-check">
-                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios11" value="option1" checked="">
+                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios11" value="M" checked="">
                         <label class="form-check-label" for="exampleRadios11">
                           Male
                         </label>
@@ -54,44 +54,17 @@
                   </div>
                 </div>
                 <div class="col-md-6">
-                  <label for="roominfo" class="form-label">Room Number</label>
-                  <input type="text" class="form-control" id="roominfo" required="">
+                  <label for="specialization" class="form-label">Specialization</label>
+                  <input type="text" class="form-control" id="specialization" required="">
                 </div>
                 <div class="col-md-6">
-                  <label for="specialization" class="form-label">Department</label>
-                  <select class="form-select" aria-label=".form-select-sm example" id="specialization">
+                  <label for="deparment" class="form-label">Department</label>
+                  <select class="form-select" aria-label=".form-select-sm example" id="deparment">
                     <option *ngFor="let department of departments" [value]="department">
                       {{ department }}
                     </option>
                 </select>
                 </div>
-              </div>
-
-              <button type="submit" class="btn btn-primary mt-4">Submit</button>
-            </form>
-          </div>
-        </div>
-        <div class="card mb-3">
-          <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-            <h6 class="mb-0 fw-bold ">Authentication Information</h6>
-          </div>
-          <div class="card-body">
-            <form>
-              <div class="row g-3 align-items-center">
-                <div class="col-md-6">
-                  <label for="user" class="form-label">User Name</label>
-                  <input type="text" class="form-control" id="user" required="">
-                </div>
-                <div class="col-md-6">
-                  <label for="password" class="form-label">Password</label>
-                  <input type="password" class="form-control" id="password" required="">
-                </div>
-                <div class="col-md-6">
-                  <label for="cnpassword" class="form-label">Confirm Password</label>
-                  <input type="password" class="form-control" id="cnpassword" required="">
-                </div>
-
-
               </div>
 
               <button type="submit" class="btn btn-primary mt-4">Submit</button>

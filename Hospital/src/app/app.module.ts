@@ -9,7 +9,6 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { PatientListComponent } from './patient-list/patient-list.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { DoctorsListComponent } from './doctors-list/doctors-list.component';
-import { DoctorsListItemComponent } from './doctors-list-item/doctors-list-item.component';
 import { DoctorProfileComponent } from './doctor-profile/doctor-profile.component';
 import { DoctorCommentComponent } from './doctor-comment/doctor-comment.component';
 import { CreateAppointmentComponent } from './create-appointment/create-appointment.component';
@@ -29,7 +28,6 @@ import {DepartmentsListComponent} from "./departments-list/departments-list.comp
     PatientListComponent,
     NotFoundComponent,
     DoctorsListComponent,
-    DoctorsListItemComponent,
     DoctorProfileComponent,
     DoctorCommentComponent,
     CreateAppointmentComponent,
@@ -54,6 +52,7 @@ import {DepartmentsListComponent} from "./departments-list/departments-list.comp
       { path: 'appointments', component: AppointmentsListComponent },
       { path: 'nurses', component: NursesListComponent },
       { path: 'departments', component: DepartmentsListComponent },
+      { path: 'add-doctor', component: AddDoctorComponent },
     ])
   ],
   providers: [],
