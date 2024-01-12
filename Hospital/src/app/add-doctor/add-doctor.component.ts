@@ -9,7 +9,6 @@ import {AddDoctorService} from "./add-doctor.service";
   styleUrls: ['./add-doctor.component.css']
 })
 export class AddDoctorComponent {
-
   departments: string[] = specializations
   doctorData: any = {};
   submitting = false;
