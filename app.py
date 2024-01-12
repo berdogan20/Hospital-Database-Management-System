@@ -352,16 +352,66 @@ def get_doctors():
 
 
 
-@app.route('/api/doctors', methods=['POST'])
-def add_doctor():
-    # Get the doctor data from the request
-    doctor_data = request.json  # Assuming data is sent as JSON
+@app.route('/api/nurses', methods=['GET'])
+def get_nurses():
+    global db_cursor
 
-    # Process the doctor data (e.g., store in database)
-    # Your logic to add a doctor to the database goes here
+    # Fetch query parameters for filtering
+    fname = request.args.get('fname')
+    lname = request.args.get('lname')
+    specialization = request.args.get('specialization')
+    gender = request.args.get('gender')
+    department = request.args.get('department')
 
-    # Return a response (you can echo back the added data or a success message)
-    return jsonify({'message': 'Doctor added successfully', 'data': doctor_data}), 200
+    # Construct the base query
+    query = ("SELECT *, Nurse.specialization, Department.department_name "
+             "FROM Staff "
+             "NATURAL JOIN Nurse "
+             "NATURAL JOIN Department "
+             "WHERE 1")
+
+    # Prepare parameters for the query
+    params = []
+
+    # Check and add filters to the query
+    if fname:
+        query += " AND Staff.fname LIKE %s"
+        params.append(f"{fname}%")  # Add '%' for partial match
+    if lname:
+        query += " AND Staff.lname LIKE %s"
+        params.append(f"{lname}%")  # Add '%' for partial match
+    if gender:
+        query += " AND Staff.gender = %s"
+        params.append(gender)
+    if specialization:
+        query += " AND Nurse.specialization LIKE %s"
+        params.append(specialization)
+    if department:
+        query += " AND Department.department_name LIKE %s"
+        params.append(department)
+
+    # Execute the query with filters (if any)
+    if params:
+        db_cursor.execute(query, tuple(params))
+    else:
+        db_cursor.execute(query)
+
+    nurses = db_cursor.fetchall()
+
+    def serialize_timedelta(obj):
+        if isinstance(obj, timedelta):
+            return str(obj)
+        return obj
+
+    nurses = [dict(zip(db_cursor.column_names, (serialize_timedelta(field) for field in row))) for row in
+                    nurses]
+
+
+    # Now jsonify your updated doctors list
+    response = jsonify(nurses)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+
 
 
 
