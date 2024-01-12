@@ -236,22 +236,25 @@ def get_departments():
     global db_cursor
 
     # Fetch query parameters for filtering
-    department_id = request.args.get('department_id')
     department_name = request.args.get('department_name')
+    department_administrator_name = request.args.get('department_administrator_name')
 
     # Construct the base query
-    query = "SELECT * FROM Department WHERE 1"
+    query = ("SELECT * , Staff.fname, Staff.lname "
+             "FROM Department "
+             "JOIN Staff ON Department.administrator_id = Staff.id "
+             "WHERE 1 ")
 
     # Prepare parameters for the query
     params = []
 
     # Check and add filters to the query
-    if department_id:
-        query += " AND department_id = %s"
-        params.append(department_id)
     if department_name:
         query += " AND department_name LIKE %s"
         params.append(f"{department_name}%")  # Add '%' for partial match
+    if department_administrator_name:
+        query += " AND administrator_id IN (SELECT id FROM Staff WHERE Staff.fname LIKE %s)"
+        params.append(f"{department_administrator_name}%")  # Add '%' for partial match
 
     # Execute the query with filters (if any)
     if params:
@@ -260,6 +263,14 @@ def get_departments():
         db_cursor.execute(query)
 
     departments = db_cursor.fetchall()
+
+    def serialize_timedelta(obj):
+        if isinstance(obj, timedelta):
+            return str(obj)  # Convert timedelta to string before serialization
+        return obj  # Return the object unchanged if it's not a timedelta
+
+    departments = [dict(zip(db_cursor.column_names, (serialize_timedelta(field) for field in row))) for row in
+               departments]
 
     # Now jsonify your departments list
     response = jsonify(departments)
@@ -333,12 +344,10 @@ def get_doctors():
     doctors = [dict(zip(db_cursor.column_names, (serialize_timedelta(field) for field in row))) for row in
                     doctors]
 
-    print("Doctors data:", doctors)
 
     # Now jsonify your updated doctors list
     response = jsonify(doctors)
     response.headers.add('Access-Control-Allow-Origin', '*')
-    print(doctors)
     return response
 
 
