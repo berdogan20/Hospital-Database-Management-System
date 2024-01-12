@@ -1,6 +1,6 @@
-﻿admin_id,fname,lname,phone_number,email
-ADM001,John,Smith,111-222-333,admin1@example.com
-ADM002,Alice,Doe,222-333-444,admin2@example.com
-ADM003,Michael,Johnson,333-444-555,admin3@example.com
-ADM004,Emily,Williams,444-555-666,admin4@example.com
-ADM005,Christopher,Brown,555-666-777,admin5@example.com
+admin_id
+ADM001
+ADM002
+ADM003
+ADM004
+ADM005

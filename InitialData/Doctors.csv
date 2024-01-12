@@ -1,31 +1,31 @@
-﻿doctor_id,fname,lname,gender,specialization,phone_number,department_id,email
-DOC001,John,Smith,M,Cardiology,123-456-789,DEP001,john.smith@example.com
-DOC002,Jane,Doe,F,Orthopedics,987-654-321,DEP002,jane.doe@example.com
-DOC003,Michael,Johnson,M,Neurology,876-543-210,DEP003,michael.johnson@example.com
-DOC004,Amy,Williams,F,Dermatology,234-567-890,DEP004,amy.williams@example.com
-DOC005,Robert,Brown,M,Internal Medicine,345-678-912,DEP005,robert.brown@example.com
-DOC006,Emily,Jones,F,Ophthalmology,456-789-023,DEP006,emily.jones@example.com
-DOC007,William,Davis,M,Psychiatry,567-890-124,DEP007,william.davis@example.com
-DOC008,Susan,Miller,F,Pediatrics,678-901-245,DEP008,susan.miller@example.com
-DOC009,Christopher,Anderson,M,ENT,789-012-356,DEP009,christopher.anderson@example.com
-DOC010,Linda,Moore,F,Surgery,890-123-467,DEP010,linda.moore@example.com
-DOC011,David,Martin,M,Cardiology,901-234-678,DEP001,david.martin@example.com
-DOC012,Sarah,Thompson,F,Orthopedics,012-345-689,DEP002,sarah.thompson@example.com
-DOC013,Andrew,Hall,M,Neurology,987-654-310,DEP003,andrew.hall@example.com
-DOC014,Michelle,Clark,F,Dermatology,876-543-219,DEP004,michelle.clark@example.com
-DOC015,James,White,M,Internal Medicine,234-567-801,DEP005,james.white@example.com
-DOC016,Amanda,Wilson,F,Ophthalmology,345-678-912,DEP006,amanda.wilson@example.com
-DOC017,Brian,Johnson,M,Psychiatry,456-789-023,DEP007,brian.johnson@example.com
-DOC018,Karen,Anderson,F,Pediatrics,567-890-134,DEP008,karen.anderson@example.com
-DOC019,Matthew,Robinson,M,ENT,678-901-345,DEP009,matthew.robinson@example.com
-DOC020,Elizabeth,Davis,F,Surgery,789-012-356,DEP010,elizabeth.davis@example.com
-DOC021,Mark,Smith,M,Cardiology,890-123-467,DEP001,mark.smith@example.com
-DOC022,Christine,Brown,F,Orthopedics,901-234-578,DEP002,christine.brown@example.com
-DOC023,Daniel,Jones,M,Neurology,012-345-689,DEP003,daniel.jones@example.com
-DOC024,Olivia,Williams,F,Dermatology,987-654-310,DEP004,olivia.williams@example.com
-DOC025,Joseph,Miller,M,Internal Medicine,876-543-209,DEP005,joseph.miller@example.com
-DOC026,Emma,Johnson,F,Ophthalmology,234-567-901,DEP006,emma.johnson@example.com
-DOC027,Christopher,Davis,M,Psychiatry,345-678-012,DEP007,christopher.davis@example.com
-DOC028,Anna,Moore,F,Pediatrics,456-789-123,DEP008,anna.moore@example.com
-DOC029,William,Thompson,M,ENT,567-890-234,DEP009,william.thompson@example.com
-DOC030,Laura,Hall,F,Surgery,678-901-345,DEP010,laura.hall@example.com
+doctor_id,title
+DOC001,Professor
+DOC002,Specialist
+DOC003,Assistant Professor
+DOC004,Ordinarius
+DOC005,General Practitioner
+DOC006,Docent
+DOC007,Specialist
+DOC008,Assistant Professor
+DOC009,General Practitioner
+DOC010,Specialist
+DOC011,Professor
+DOC012,Ordinarius
+DOC013,Assistant Professor
+DOC014,Specialist
+DOC015,Assistant Professor
+DOC016,Professor
+DOC017,Docent
+DOC018,Ordinarius
+DOC019,Assistant Professor
+DOC020,General Practitioner
+DOC021,Specialist
+DOC022,Ordinarius
+DOC023,Assistant Professor
+DOC024,Professor
+DOC025,Specialist
+DOC026,Docent
+DOC027,Professor
+DOC028,Specialist
+DOC029,Assistant Professor
+DOC030,General Practitioner

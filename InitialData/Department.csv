@@ -1,11 +1,11 @@
-﻿department_id,department_name
-DEP001,Cardiology
-DEP002,Orthopedics
-DEP003,Neurology
-DEP004,Dermatology
-DEP005,Internal Medicine
-DEP006,Ophthalmology
-DEP007,Psychiatry
-DEP008,Pediatrics
-DEP009,ENT
-DEP010,Surgery
+department_id,department_name,admin_id
+DEP001,Cardiology,ADM001
+DEP002,Orthopedics,ADM001
+DEP003,Neurology,ADM003
+DEP004,Dermatology,ADM003
+DEP005,Internal Medicine,ADM005
+DEP006,Ophthalmology,ADM005
+DEP007,Psychiatry,ADM004
+DEP008,Pediatrics,ADM004
+DEP009,ENT,ADM002
+DEP010,Surgery,ADM002
