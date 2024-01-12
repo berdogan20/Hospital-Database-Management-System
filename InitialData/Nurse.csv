@@ -1,0 +1,11 @@
+id,specialization,department_id
+S021,Pediatric Nurse,D003
+S022,Cardiac Nurse,D001
+S023,Orthopedic Nurse,D002
+S024,Internal Medicine Nurse,D004
+S025,OB/GYN Nurse,D005
+S026,Dermatology Nurse,D006
+S027,Neurology Nurse,D007
+S028,Ophthalmology Nurse,D008
+S029,Psychiatry Nurse,D009
+S030,Radiology Nurse,D010
