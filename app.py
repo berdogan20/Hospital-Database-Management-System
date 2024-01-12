@@ -80,7 +80,7 @@ def create_staff_table():
                                 fname CHAR(15) NOT NULL,
                                 lname CHAR(15) NOT NULL,
                                 email CHAR(30) NOT NULL,
-                                phone_number CHAR(10) NOT NULL,
+                                phone_number CHAR(11) NOT NULL,
                                 gender CHAR(1) NOT NULL,
                                 PRIMARY KEY (id)
                             )""")
@@ -226,7 +226,7 @@ create_appointment_record_table()
 
 
 
-############################## METHODS #######################
+############################## GET METHODS #######################
 @app.route('/')
 def hello_world():  # put application's code here
     return "Hello World"
@@ -527,6 +527,84 @@ def get_appointments():
     response = jsonify(appointments)
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+################################# POST METHODS #################################
+import uuid
+from flask import abort
+
+def generate_unique_id():
+    return str(uuid.uuid4())[:10]
+
+@app.route('/api/doctors', methods=['POST'])
+def add_doctor():
+    global db_connection, db_cursor
+    data = request.json  # Assuming the data is sent as JSON in the request body
+
+    # Validate and extract data from the JSON
+    fname = data.get('fname')
+    lname = data.get('lname')
+    email = data.get('email')
+    phone_number = data.get('phone_number')
+    gender = data.get('gender')
+    title = data.get('title')
+    department_name = data.get('department_name')
+
+    # Perform validation
+    if not all([fname, lname, email, phone_number, gender, title, department_name]):
+        return jsonify({"error": "All fields are required"}), 400
+
+    # Fetch the department ID based on the department name
+    get_department_id_query = "SELECT department_id FROM Department WHERE department_name = %s"
+
+    try:
+        with db_connection.cursor() as cursor:
+            cursor.execute(get_department_id_query, (department_name,))
+            department_id = cursor.fetchone()
+            if department_id:
+                id = generate_unique_id()
+
+                # Insert the new staff into the database
+                insert_staff_query = (
+                    "INSERT INTO Staff(id, fname, lname, email, phone_number, gender)"
+                    "VALUES (%s, %s, %s, %s, %s, %s)"
+                )
+
+                # Insert the new doctor into the database
+                insert_doctor_query = (
+                    "INSERT INTO Doctor(id, title, department_id)"
+                    "VALUES (%s, %s, %s)"
+                )
+                cursor.execute(insert_staff_query, (id, fname, lname, email, phone_number, gender))
+                cursor.execute(insert_doctor_query, (id, title, department_id[0]))
+                db_connection.commit()
+
+                return jsonify({"message": "Doctor added successfully"}), 201
+            else:
+                return jsonify({"error": "Department not found"}), 404
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+
+
+
+
+
 
 
 
