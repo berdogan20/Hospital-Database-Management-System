@@ -19,7 +19,7 @@ import {MenuComponent} from "./menu/menu.component";
 import {AppointmentsListComponent} from "./appointments-list/appointments-list.component";
 import {NursesListComponent} from "./nurses-list/nurses-list.component";
 import {DepartmentsListComponent} from "./departments-list/departments-list.component";
-import { AddPatientComponent } from './add-doctor/add-patient/add-patient.component';
+import { AddPatientComponent } from './add-patient/add-patient.component';
 
 @NgModule({
   declarations: [

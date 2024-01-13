@@ -307,7 +307,7 @@ def get_doctors():
     department = request.args.get('department')
 
     # Construct the base query
-    query = ("SELECT *, Doctor.title, Department.department_name "
+    query = ("SELECT Staff.*, Doctor.title, Department.department_name "
              "FROM Staff JOIN Doctor ON Staff.id = Doctor.id "
              "JOIN Department ON Doctor.department_id = Department.department_id WHERE 1")
 
