@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class DoctorsService {
-   private apiUrl = 'http://127.0.0.1:5000/api/doctors';
+  private apiUrl = 'http://127.0.0.1:5000/api/doctors';
   constructor(private http: HttpClient) {}
 
   getDoctors(filters: any): Observable<any[]> {

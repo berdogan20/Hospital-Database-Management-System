@@ -24,28 +24,20 @@ export class CreateAppointmentComponent implements OnInit{
   }
 
   fetchDoctors() {
-  this.doctorsService.getDoctors(this.filters)
-    .subscribe(
-      (data: any[]) => {
+    this.doctorsService.getDoctors(this.filters)
+      .subscribe((data: any[]) => {
         this.doctors = data;
-      },
-      (error) => {
-        console.error('Error fetching doctors:', error);
-      }
-    );
-}
+      });
+    console.log(this.doctors)
+  }
 
 
   fetchPatients() {
     this.patientsService.getPatients(this.filters)
-      .subscribe(
-      (data: any[]) => {
+      .subscribe((data: any[]) => {
         this.patients = data;
-      },
-      (error) => {
-        console.error('Error fetching patients:', error);
-      }
-    );
+      });
+    console.log(this.patients)
   }
 
 }
