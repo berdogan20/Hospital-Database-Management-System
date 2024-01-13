@@ -20,8 +20,14 @@
                 <div class="row">
                   <div class="col-md-2">
                     <div class="form-group">
-                      <label for="doctorName">Doctor Name:</label>
-                      <input type="text" id="doctorName" [(ngModel)]="filters.doctorName" class="form-control">
+                      <label for="doctor_fname">Doctor Name:</label>
+                      <input type="text" id="doctor_fname" [(ngModel)]="filters.doctor_fname" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <label for="patient_fname">Patient Name:</label>
+                      <input type="text" id="patient_fname" [(ngModel)]="filters.patient_fname" class="form-control">
                     </div>
                   </div>
                   <div class="col-md-2">
@@ -42,13 +48,13 @@
                       <input type="time" id="endTime" [(ngModel)]="filters.endTime" class="form-control">
                     </div>
                   </div>
-                  <div class="col-md-2">
+                  <div class="col-md-3">
                     <div class="form-group">
                       <br>
                       <button (click)="applyFilters()" class="btn btn-primary ">Apply Filters</button>
                     </div>
                   </div>
-                  <div class="col-md-2">
+                  <div class="col-md-3">
                     <div class="form-group">
                       <br>
                       <button (click)="clearFilters()" class="btn btn-secondary">Clear Filters</button>
@@ -63,24 +69,28 @@
                        style="width: 100%;" role="grid" aria-describedby="appointment-table_info">
                   <thead>
                   <tr role="row">
-                    <th class="sorting_asc" style="width: 275.2px;" aria-label="Id: activate to sort column descending">
-                      Id
-                    </th>
-                    <th class="sorting" style="width: 500.2px;" aria-label="Date: activate to sort column ascending">
+
+                    <th class="sorting" style="width: 200.2px;" aria-label="Date: activate to sort column ascending">
                       Date
                     </th>
-                    <th class="sorting" style="width: 227.2px;"
+                    <th class="sorting" style="width: 100.2px;"
                         aria-label="Start Time: activate to sort column ascending">
                       Start Time
                     </th>
-                    <th class="sorting" style="width: 0px;" aria-label="End Time: activate to sort column ascending">
+                    <th class="sorting" style="width: 100px;" aria-label="End Time: activate to sort column ascending">
                       End Time
+                    </th>
+                    <th class="sorting" style="width: 100px;" aria-label="Doctor ID: activate to sort column ascending">
+                      Doctor ID
+                    </th>
+                    <th class="sorting" style="width: 150px;" aria-label="Doctor ID: activate to sort column ascending">
+                      Doctor Name
                     </th>
                     <th class="sorting" style="width: 0px;" aria-label="Patient ID: activate to sort column ascending">
                       Patient ID
                     </th>
-                    <th class="sorting" style="width: 0px;" aria-label="Doctor ID: activate to sort column ascending">
-                      Doctor ID
+                    <th class="sorting" style="width: 150px;" aria-label="Doctor ID: activate to sort column ascending">
+                      Patient Name
                     </th>
                   </tr>
 
@@ -89,12 +99,13 @@
                   </thead>
                   <tbody *ngFor="let appointment of appointments">
                   <tr role="row" class="odd">
-                    <td tabindex="0" class="sorting_1">{{ appointment.appointment_id }}</td>
-                    <td tabindex="0" class="sorting_1">{{ appointment.date }}</td>
+                    <td>{{ appointment.date }}</td>
                     <td>{{ appointment.start_time }}</td>
                     <td>{{ appointment.end_time }}</td>
-                    <td>{{ appointment.patient_id }}
                     <td>{{ appointment.doctor_id }}</td>
+                    <td>{{ appointment.doctor_fname }} {{ appointment.doctor_lname }}</td>
+                    <td>{{ appointment.patient_id }}
+                    <td>{{ appointment.patient_fname }} {{ appointment.patient_lname }}</td>
                   </tr>
                   </tbody>
                 </table>

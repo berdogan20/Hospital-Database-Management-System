@@ -16,21 +16,6 @@
 
             <!-- filters -->
             <div class="row">
-              <!--<div class="col-md-1">
-                <label>
-                  Show
-                  <select name="patient-table_length" aria-controls="patient-table"
-                          class="form-select" id="limit" [(ngModel)]="filters.limit">
-                    <option value="10">5</option>
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                    <option value="30">30</option>
-                    <option value="40">40</option>
-                    <option value="50">50</option>
-                  </select>
-                  entries
-                </label>
-              </div>-->
               <div class="col-md-2">
                 <div class="form-group">
                   <label for="fname">First Name</label>
@@ -100,14 +85,11 @@
                     <th class="sorting" style="width: 100.2px;" aria-label="Last Name: activate to sort column ascending">
                       Last Name
                     </th>
-                    <th class="sorting" style="width: 20px;" aria-label="Age: activate to sort column ascending">
+                    <th class="sorting" style="width: 20px;" aria-label="Birth Date: activate to sort column ascending">
                       Age
                     </th>
-                    <th class="sorting" style="width: 20px;" aria-label="Sex: activate to sort column ascending">
-                      Sex
-                    </th>
-                    <th class="sorting" style="width: 220px;" aria-label="Insurance Details: activate to sort column ascending">
-                      Insurance Details
+                    <th class="sorting" style="width: 20px;" aria-label="Gender: activate to sort column ascending">
+                      Gender
                     </th>
                     <th class="sorting" style="width: 120px;" aria-label="Email: activate to sort column ascending">
                       Email
@@ -127,9 +109,8 @@
                     <td tabindex="0" class="sorting_1">{{ patient.patient_id }}</td>
                     <td tabindex="0" class="sorting_1">{{ patient.fname }}</td>
                     <td tabindex="0" class="sorting_1">{{ patient.lname }}</td>
-                    <td tabindex="0" class="sorting_1">{{ patient.age }}</td>
-                    <td tabindex="0" class="sorting_1">{{ patient.sex }}</td>
-                    <td tabindex="0" class="sorting_1">{{ patient.insurance_details }}</td>
+                    <td tabindex="0" class="sorting_1">{{ patient.bdate }}</td>
+                    <td tabindex="0" class="sorting_1">{{ patient.gender }}</td>
                     <td tabindex="0" class="sorting_1">{{ patient.email }}</td>
                     <td tabindex="0" class="sorting_1">{{ patient.phone_number }}</td>
                     <td tabindex="0" class="sorting_1">{{ patient.address }}</td>

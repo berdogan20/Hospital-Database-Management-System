@@ -479,7 +479,11 @@ def get_appointments():
     end_time = request.args.get('end_time')
 
     # Construct the base query
-    query = "SELECT * FROM Appointment_Record WHERE 1"
+    query = ("SELECT Appointment_Record.*, Staff.fname as doctor_fname, Staff.lname as doctor_lname, Patient.fname as patient_fname, Patient.lname as patient_lname "
+             "FROM Appointment_Record "
+             "JOIN Staff ON Appointment_Record.doctor_id = Staff.id "
+             "JOIN Patient ON Appointment_Record.patient_id = Patient.patient_id "
+             "WHERE 1")
 
     # Prepare parameters for the query
     params = []
@@ -489,11 +493,11 @@ def get_appointments():
         query += " AND date = %s"
         params.append(date)
     if doctor_fname:
-        query += " AND doctor_id IN (SELECT id FROM Staff WHERE fname = %s)"
-        params.append(doctor_fname)
+        query += " AND doctor_id IN (SELECT id FROM Staff WHERE fname LIKE %s)"
+        params.append(f"{doctor_fname}%")
     if patient_fname:
-        query += " AND patient_id IN (SELECT patient_id FROM Patient WHERE fname = %s)"
-        params.append(patient_fname)
+        query += " AND patient_id IN (SELECT patient_id FROM Patient WHERE fname LIKE %s)"
+        params.append(f"{patient_fname}%")
     if patient_id:
         query += " AND patient_id = %s"
         params.append(patient_id)
