@@ -20,6 +20,7 @@ import {AppointmentsListComponent} from "./appointments-list/appointments-list.c
 import {NursesListComponent} from "./nurses-list/nurses-list.component";
 import {DepartmentsListComponent} from "./departments-list/departments-list.component";
 import { AddPatientComponent } from './add-patient/add-patient.component';
+import { AddNurseComponent } from './add-nurse/add-nurse.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { AddPatientComponent } from './add-patient/add-patient.component';
     NursesListComponent,
     AppointmentsListComponent,
     AddPatientComponent,
+    AddNurseComponent,
   ],
   imports: [
     BrowserModule,
@@ -56,6 +58,7 @@ import { AddPatientComponent } from './add-patient/add-patient.component';
       { path: 'departments', component: DepartmentsListComponent },
       { path: 'add-doctor', component: AddDoctorComponent },
       { path: 'add-patient', component: AddPatientComponent },
+      { path: 'add-nurse', component: AddNurseComponent },
     ])
   ],
   providers: [],
