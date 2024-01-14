@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {DoctorsService} from "../doctors-list/doctors.service";
 import {PatientsService} from "../patient-list/patients.service";
+import {forkJoin} from "rxjs";
+import {DoctorsListComponent} from "../doctors-list/doctors-list.component";
 
 @Component({
   selector: 'app-create-appointment',
@@ -12,32 +14,11 @@ export class CreateAppointmentComponent implements OnInit{
   patients: any[] = []
   filters: any = {}; // Define filters here
 
-  constructor(private doctorsService: DoctorsService,
-              private patientsService: PatientsService) {
-  }
 
-  ngOnInit()
-  {
+  ngOnInit() {
     this.filters = {}; // Initialize filters
-    this.fetchDoctors();
-    this.fetchPatients();
+
   }
 
-  fetchDoctors() {
-    this.doctorsService.getDoctors(this.filters)
-      .subscribe((data: any[]) => {
-        this.doctors = data;
-      });
-    console.log(this.doctors)
-  }
-
-
-  fetchPatients() {
-    this.patientsService.getPatients(this.filters)
-      .subscribe((data: any[]) => {
-        this.patients = data;
-      });
-    console.log(this.patients)
-  }
 
 }
