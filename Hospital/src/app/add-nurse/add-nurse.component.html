@@ -1,0 +1,77 @@
+<div class="body d-flex py-3">
+  <div class="container-xxl">
+    <div class="row align-items-center">
+      <div class="border-0 mb-4">
+        <div
+          class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+          <h2>Add Patient</h2>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-sm-12">
+        <div class="card mb-3">
+          <div class="card-body">
+            <form (ngSubmit)="submitForm()" #nurseForm="ngForm">
+              <div class="row g-3 align-items-center">
+                <div class="col-md-6">
+                  <label for="fname" class="form-label">First Name</label>
+                  <input type="text" name="fname" class="form-control" id="fname" [(ngModel)]="data.fname"
+                         required>
+                </div>
+                <div class="col-md-6">
+                  <label for="lname" class="form-label">Last Name:</label>
+                  <input type="text" id="lname" class="form-control" name="lname" [(ngModel)]="data.lname"
+                         required>
+                </div>
+                <div class="col-md-6">
+                  <label for="email" class="form-label">Email:</label>
+                  <input type="email" id="email" class="form-control" name="email" [(ngModel)]="data.email"
+                         required>
+                </div>
+                <div class="col-md-6">
+                  <label for="phone_number" class="form-label">phone_number:</label>
+                  <input type="email" id="phone_number" class="form-control" name="phone_number"
+                         [(ngModel)]="data.phone_number" required>
+                </div>
+                <div class="col-md-6">
+                  <label for="gender" class="form-label">gender:</label>
+                  <input type="text" id="gender" class="form-control" name="gender" [(ngModel)]="data.gender"
+                         required>
+                </div>
+                 <div class="col-md-6">
+                  <label for="department_name" class="form-label">Department</label>
+                  <select class="form-select" id="department_name" name="department_name"
+                          aria-label=".form-select-sm example" [(ngModel)]="data.department_name" required>
+                    <option *ngFor="let department of departments" [value]="department">
+                      {{ department }}
+                    </option>
+                  </select>
+                </div>
+                <div>
+                   <div class="col-md-6">
+                  <label for="specialization" class="form-label">Specialization:</label>
+                  <input type="text" id="specialization" class="form-control" name="specialization" [(ngModel)]="data.specialization"
+                         required>
+                </div>
+                </div>
+                <button type="submit" [disabled]="!nurseForm.valid" class="btn btn-primary mt-4">Submit</button>
+              </div>
+            </form>
+            <br>
+            <div *ngIf="submitting">
+              <h3>Adding doctor, please wait...</h3>
+            </div>
+
+            <div *ngIf="responseMessage">
+              <h3>{{ responseMessage }}</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
