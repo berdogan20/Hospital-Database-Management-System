@@ -105,7 +105,7 @@
 
                   <!-- table body -->
                   <tbody *ngFor="let patient of patients">
-                  <tr role="row" class="odd">
+                  <tr role="row" class="odd" [routerLink]="['/patient-profile', patient.patient_id]">
                     <td tabindex="0" class="sorting_1">{{ patient.patient_id }}</td>
                     <td tabindex="0" class="sorting_1">{{ patient.fname }}</td>
                     <td tabindex="0" class="sorting_1">{{ patient.lname }}</td>

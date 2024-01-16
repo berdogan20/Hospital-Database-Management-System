@@ -21,6 +21,7 @@ import {NursesListComponent} from "./nurses-list/nurses-list.component";
 import {DepartmentsListComponent} from "./departments-list/departments-list.component";
 import { AddPatientComponent } from './add-patient/add-patient.component';
 import { AddNurseComponent } from './add-nurse/add-nurse.component';
+import { PatientProfileComponent } from './patient-profile/patient-profile.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { AddNurseComponent } from './add-nurse/add-nurse.component';
     AppointmentsListComponent,
     AddPatientComponent,
     AddNurseComponent,
+    PatientProfileComponent,
   ],
   imports: [
     BrowserModule,
@@ -59,8 +61,9 @@ import { AddNurseComponent } from './add-nurse/add-nurse.component';
       { path: 'add-doctor', component: AddDoctorComponent },
       { path: 'add-patient', component: AddPatientComponent },
       { path: 'add-nurse', component: AddNurseComponent },
-      { path: 'add-appointment', component: CreateAppointmentComponent },
+      { path: 'add-appointment/:patient_id', component: CreateAppointmentComponent },
       { path: 'doctor-profile/:doctor_id', component: DoctorProfileComponent},
+      { path: 'patient-profile/:patient_id', component: PatientProfileComponent},
     ])
   ],
   providers: [],
