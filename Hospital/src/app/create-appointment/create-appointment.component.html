@@ -11,47 +11,50 @@
       <div class="col-sm-12">
         <div class="card mb-3">
           <div class="card-body">
-            <form>
+            <form (ngSubmit)="submitForm()" #appointmentForm="ngForm">
               <div class="row g-3 align-items-center">
 
                 <div class="col-md-4">
                   <label for="date" class="form-label">Appointment Date</label>
-                  <input type="date" class="form-control" id="date">
+                  <input type="date" class="form-control" id="date"  name="date"
+                         [(ngModel)]="appointmentData.date" required>
                 </div>
                 <div class="col-md-4">
                   <label for="start_time" class="form-label">Start Time</label>
-                  <input type="time" class="form-control" id="start_time">
+                  <input type="time" class="form-control" id="start_time" name="start_time"
+                         [(ngModel)]="appointmentData.start_time" required>
                 </div>
                 <div class="col-md-4">
                   <label for="end_time" class="form-label">End Time</label>
-                  <input type="time" class="form-control" id="end_time">
+                  <input type="time" class="form-control" id="end_time" name="end_time"
+                         [(ngModel)]="appointmentData.end_time" required>
                 </div>
                 <div class="col-md-6">
                   <label class="form-label">Select Doctor</label>
-                  <select class="form-select" aria-label="Default select example" >
+                  <select class="form-select" aria-label="Default select example" name="doctor_id" [(ngModel)]="appointmentData.doctor_id">
                     <option selected="">Select Doctor</option>
                     <option *ngFor="let doctor of doctors" [value]="doctor.id">{{ doctor.title }} {{ doctor.fname }} {{doctor.lname }}</option>
                   </select>
                 </div>
 
-                <div class="col-md-6">
-                  <label class="form-label">Select Patient</label>
-                  <select class="form-select" aria-label="Default select example" >
-                    <option selected="">Select Patient</option>
-                    <option *ngFor="let patient of patients" [value]="patient.patient_id">{{ patient.fname }} {{patient.lname }}</option>
-                  </select>
-                </div>
-
-
                 <div class="col-md-12">
                   <label for="insurance_details" class="form-label">Insurance Details</label>
-                  <textarea class="form-control" id="insurance_details" rows="3"></textarea>
+                  <textarea type="text" class="form-control" id="insurance_details" rows="3" name="insurance_details"
+                         [(ngModel)]="appointmentData.insurance_details" required></textarea>
                 </div>
               </div>
 
-              <button type="submit" class="btn btn-primary mt-4">Submit</button>
+              <button type="submit" [disabled]="!appointmentForm.valid" class="btn btn-primary mt-4">Submit</button>
             </form>
           </div>
+            <br>
+            <div *ngIf="submitting">
+              <h3>Adding doctor, please wait...</h3>
+            </div>
+
+            <div *ngIf="responseMessage">
+              <h3>{{ responseMessage }}</h3>
+            </div>
         </div>
       </div>
     </div>

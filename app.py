@@ -576,6 +576,75 @@ def get_patients():
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
+@app.route('/api/patient-detail', methods=['GET'])
+def get_patient_detail_info():
+    global db_cursor
+
+    # Fetch query parameters for filtering
+    patient_id = request.args.get('patient_id')
+
+    query = """
+        SELECT 
+            Patient.patient_id AS patient_id,
+            Patient.fname AS patient_fname,
+            Patient.lname AS patient_lname,
+            Patient.email AS patient_email,
+            Patient.address AS patient_address,
+            Patient.gender AS patient_gender,
+            Patient.bdate AS patient_bdate,
+            Patient.phone_number AS patient_phone_number,
+            Staff.fname AS doctor_fname,
+            Staff.lname AS doctor_lname,
+            Appointment_Record.date AS appointment_date,
+            Appointment_Record.start_time AS appointment_start_time,
+            Appointment_Record.end_time AS appointment_end_time,
+            Appointment_Record.insurance_details AS insurance_details
+        FROM Patient
+        LEFT JOIN Appointment_Record ON Patient.patient_id = Appointment_Record.patient_id
+        JOIN Staff ON Appointment_Record.doctor_id = Staff.id
+        WHERE Patient.patient_id = %s
+    """
+
+    # ...
+
+    # Execute the query with the patient_id filter
+    db_cursor.execute(query, (patient_id,))
+    result = db_cursor.fetchall()
+
+    # Check if any results were found
+    if result:
+        # Organize the results into a dictionary
+        patient_info = {
+            "patient_id": result[0][0],
+            "patient_fname": result[0][1],
+            "patient_lname": result[0][2],
+            "patient_email": result[0][3],
+            "patient_address": result[0][4],
+            "patient_gender": result[0][5],
+            "patient_bdate": result[0][6],
+            "patient_phone_number": result[0][7],
+            "appointments": []
+        }
+
+        for row in result:
+            appointment_info = {
+                "doctor_fname": row[8],
+                "doctor_lname": row[9],
+                "appointment_date": row[10],
+                "appointment_start_time": row[11],
+                "appointment_end_time": row[12],
+                "insurance_details": row[13]
+            }
+            patient_info["appointments"].append(appointment_info)
+
+        # Now jsonify the patient information
+        response = jsonify(patient_info)
+    else:
+        # Handle the case when no results are found for the given patient_id
+        response = jsonify({"error": "Patient not found"})
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+
 
 @app.route('/api/appointments', methods=['GET'])
 def get_appointments():
@@ -792,6 +861,51 @@ def add_doctor():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+
+@app.route('/api/add-appointment', methods=['POST'])
+
+
+@app.route('/api/add-appointment', methods=['POST'])
+def add_appointment():
+    global db_connection, db_cursor
+    data = request.json  # Assuming the data is sent as JSON in the request body
+
+    # Validate and extract data from the JSON
+    patient_id = data.get('patient_id')
+    doctor_id = data.get('doctor_id')
+    date = data.get('date')
+    start_time = data.get('start_time')
+    end_time = data.get('end_time')
+    insurance_details = data.get('insurance_details')
+
+    # Perform validation
+    if not all([patient_id, doctor_id, date, start_time, end_time, insurance_details]):
+        print(patient_id, doctor_id, date, start_time, end_time, insurance_details)
+        return jsonify({"error": "All fields are required"}), 400
+
+    appointment_id = generate_unique_id()
+    record_id = generate_unique_id()
+
+    try:
+        with db_connection.cursor() as cursor:
+            print(appointment_id, record_id, date, start_time, end_time, insurance_details, patient_id, doctor_id)
+            insert_appointment_query = (
+                "INSERT INTO Appointment_Record(appointment_id, record_id, date, start_time, end_time, insurance_details, patient_id, doctor_id) "
+                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+            )
+            cursor.execute(insert_appointment_query, (appointment_id, record_id, date, start_time, end_time,
+                                                      insurance_details, patient_id, doctor_id))
+            db_connection.commit()
+            return jsonify({"success": "Appointment added successfully"}), 200
+
+    except Exception as e:
+        # Log the error
+        print(f"Error adding appointment: {str(e)}")
+
+        # Return an error response
+        return jsonify({"error": "Internal Server Error"}), 500
 
 
 @app.route('/api/nurses', methods=['POST'])
