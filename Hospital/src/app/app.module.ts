@@ -60,6 +60,7 @@ import { AddNurseComponent } from './add-nurse/add-nurse.component';
       { path: 'add-patient', component: AddPatientComponent },
       { path: 'add-nurse', component: AddNurseComponent },
       { path: 'add-appointment', component: CreateAppointmentComponent },
+      { path: 'doctor-profile/:doctor_id', component: DoctorProfileComponent},
     ])
   ],
   providers: [],
