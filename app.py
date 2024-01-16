@@ -96,7 +96,7 @@ def create_administrator_table():
         db_cursor.execute("""CREATE TABLE Administrator(
                                 id CHAR(10) NOT NULL,
                                 PRIMARY KEY (id),
-                                FOREIGN KEY (id) REFERENCES Staff(id)
+                                FOREIGN KEY (id) REFERENCES Staff(id) ON DELETE CASCADE
                             )""")
         insert_administrators = (
             "INSERT INTO Administrator(id)"
@@ -113,7 +113,7 @@ def create_doctor_table():
                                 title CHAR(30),
                                 department_id CHAR(10) NOT NULL,
                                 PRIMARY KEY (id),
-                                FOREIGN KEY (id) REFERENCES Staff(id),
+                                FOREIGN KEY (id) REFERENCES Staff(id) ON DELETE CASCADE,
                                 FOREIGN KEY (department_id) REFERENCES Department(department_id)
                             )""")
 
@@ -132,7 +132,7 @@ def create_nurse_table():
                                 specialization CHAR(30),
                                 department_id CHAR(10) NOT NULL,
                                 PRIMARY KEY (id),
-                                FOREIGN KEY (id) REFERENCES Staff(id),
+                                FOREIGN KEY (id) REFERENCES Staff(id) ON DELETE CASCADE,
                                 FOREIGN KEY (department_id) REFERENCES Department(department_id)
                             )""")
 
@@ -182,7 +182,37 @@ def create_appointment_record_table():
         populate_table(db_connection, db_cursor, insert_appointments, "InitialData/Appointment_Record.csv")
 
 
+def create_secretary_table():
+    table_name = "Secretary"
+    if not table_exists(table_name):
+        db_cursor.execute("""CREATE TABLE Secretary (
+                             id CHAR(10) NOT NULL,
+                             doctor_id CHAR(10) NOT NULL,
+                             PRIMARY KEY (id),
+                             FOREIGN KEY (id) REFERENCES Staff(id)
+                             ON DELETE CASCADE,
+                             FOREIGN KEY (doctor_id) REFERENCES Doctor(id))
+                             """)
+        insert_secretaries = (
+            "INSERT INTO Secretary(id, doctor_id)"
+            "VALUES (%s, %s)"
+        )
+        populate_table(db_connection, db_cursor, insert_secretaries, "InitialData/Secretary.csv")
 
+def create_secretary_language_table():
+    table_name = "Secretary_Language"
+    if not table_exists(table_name):
+        db_cursor.execute("""CREATE TABLE Secretary_Language(
+                                secretary_id CHAR(10) NOT NULL,
+                                language CHAR(30) NOT NULL,
+                                PRIMARY KEY (secretary_id, language),
+                                FOREIGN KEY (secretary_id) REFERENCES Secretary(id)
+                            )""")
+        insert_secretary_languages = (
+            "INSERT INTO Secretary_Language(secretary_id, language)"
+            "VALUES (%s, %s)"
+        )
+        populate_table(db_connection, db_cursor, insert_secretary_languages, "InitialData/Secretary_Language.csv")
 
 
 
@@ -194,11 +224,12 @@ create_staff_table()
 
 create_administrator_table()
 create_department_table()
-
 create_doctor_table()
 create_nurse_table()
-create_appointment_record_table()
+create_secretary_table()
 
+create_appointment_record_table()
+create_secretary_language_table()
 
 
 
@@ -349,6 +380,84 @@ def get_doctors():
     response = jsonify(doctors)
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
+
+
+
+@app.route('/api/doctor-detail', methods=['GET'])
+def get_doctor_detail_info():
+    global db_cursor
+
+    # Fetch query parameters for filtering
+    doctor_id = request.args.get('doctor_id')
+
+    query = ("""
+        SELECT 
+            Doctor.id AS doctor_id,
+            Doctor.title AS doctor_title,
+            StaffDoctor.fname AS doctor_fname,
+            StaffDoctor.lname AS doctor_lname,
+            StaffDoctor.email AS doctor_email,
+            StaffDoctor.phone_number AS doctor_phone_number,
+            Secretary.id AS secretary_id,
+            StaffSecretary.fname AS secretary_fname,
+            StaffSecretary.lname AS secretary_lname,
+            StaffSecretary.email AS secretary_email,
+             StaffSecretary.phone_number AS secretary_phone_number,
+            Secretary_Language.language AS secretary_language
+        FROM Doctor
+        LEFT JOIN Secretary ON Doctor.id = Secretary.doctor_id
+        LEFT JOIN Staff AS StaffDoctor ON Doctor.id = StaffDoctor.id
+        LEFT JOIN Staff AS StaffSecretary ON Secretary.id = StaffSecretary.id
+        LEFT JOIN Secretary_Language ON Secretary.id = Secretary_Language.secretary_id
+    """)
+
+    # Prepare parameters for the query
+    params = []
+
+    # Check and add filters to the query
+    if doctor_id:
+        query += " WHERE Doctor.id = %s"
+        params.append(doctor_id)
+
+    # Execute the query with filters (if any)
+    if params:
+        db_cursor.execute(query, tuple(params))
+    else:
+        db_cursor.execute(query)
+
+    result = db_cursor.fetchall()
+
+    doctor_details = {}
+    for row in result:
+        doctor_id = row[0]  # Access the first element of the tuple
+        if doctor_id not in doctor_details:
+            doctor_details[doctor_id] = {
+                'doctor_title': row[1],
+                'doctor_fname': row[2],
+                'doctor_lname': row[3],
+                'doctor_email': row[4],
+                'doctor_phone_number': row[5],
+                'secretaries': []
+            }
+
+        secretary_id = row[6]
+        if secretary_id:
+            doctor_details[doctor_id]['secretaries'].append({
+                'secretary_id': secretary_id,
+                'secretary_fname': row[7],
+                'secretary_lname': row[8],
+                'secretary_email': row[9],
+                'secretary_phone_number': row[10],
+                'languages': [row[11]] if row[11] else []
+            })
+
+
+    # Now jsonify your updated result
+    response = jsonify(doctor_details)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+
+
 
 
 
@@ -534,8 +643,89 @@ def get_appointments():
 
 
 
+@app.route('/api/secretaries', methods=['GET'])
+def get_secretaries():
+    global db_cursor
+
+    # Fetch query parameters for filtering
+    doctor_id = request.args.get('doctor_id')
+
+    # Prepare parameters for the query
+    params = []
+
+    # Construct the base query
+    query = ("SELECT Staff.* "
+             "FROM Secretary, Staff "
+             "WHERE Secretary.id = Staff.id ")
+
+    # Check and add filters to the query
+    if doctor_id:
+        query += " AND doctor_id IN (SELECT id FROM Doctor WHERE id = %s)"
+        params.append(doctor_id)
+
+    # Execute the query with filters (if any)
+    if params:
+        db_cursor.execute(query, tuple(params))
+    else:
+        db_cursor.execute(query)
+
+    secretaries = db_cursor.fetchall()
+
+    def serialize_timedelta(obj):
+        if isinstance(obj, timedelta):
+            return str(obj)
+        return obj
+
+    secretaries = [dict(zip(db_cursor.column_names, (serialize_timedelta(field) for field in row))) for row in
+                    secretaries]
 
 
+    # Now jsonify your updated doctors list
+    response = jsonify(secretaries)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+
+
+
+@app.route('/api/secretary_languages', methods=['GET'])
+def get_secretary_languages():
+    global db_cursor
+
+    # Fetch query parameters for filtering
+    secretary_id = request.args.get('secretary_id')
+
+    # Construct the base query
+    query = ("SELECT * FROM Secretary_Language")
+
+    # Prepare parameters for the query
+    params = []
+
+    # Check and add filters to the query
+    if secretary_id:
+        query += " AND secretary_id IN (SELECT id FROM Secretary WHERE id = %s)"
+        params.append(secretary_id)
+
+    # Execute the query with filters (if any)
+    if params:
+        db_cursor.execute(query, tuple(params))
+    else:
+        db_cursor.execute(query)
+
+    languages = db_cursor.fetchall()
+
+    def serialize_timedelta(obj):
+        if isinstance(obj, timedelta):
+            return str(obj)
+        return obj
+
+    languages = [dict(zip(db_cursor.column_names, (serialize_timedelta(field) for field in row))) for row in
+                    languages]
+
+
+    # Now jsonify your updated doctors list
+    response = jsonify(languages)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 
 

@@ -120,7 +120,7 @@
 
 
                     <ul *ngFor="let doctor of doctors">
-                      <li>
+                      <li [routerLink]="['/doctor-profile', doctor.id]">
                         <div class="col">
                           <div class="card teacher-card ">
                             <div class="card-body d-flex flex-column">
