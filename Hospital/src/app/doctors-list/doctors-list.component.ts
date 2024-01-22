@@ -22,7 +22,6 @@ export class DoctorsListComponent implements OnInit {
       .subscribe((data: any[]) => {
         this.doctors = data;
       });
-    console.log(this.doctors)
   }
   applyFilters() {
     // Call fetchAppointments to apply updated filters
@@ -34,5 +33,12 @@ export class DoctorsListComponent implements OnInit {
     this.fetchDoctors(); // Fetch doctors without filters
   }
 
+  onDeleteDoctor(doctorId: string) {
+    this.doctorsService.deleteDoctor(doctorId).subscribe(() => {
+      // Refresh the list after deletion
+      console.log("doctor_id: ", doctorId)
+      this.fetchDoctors();
+    });
+  }
 
 }

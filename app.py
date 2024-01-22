@@ -114,7 +114,7 @@ def create_doctor_table():
                                 department_id CHAR(10) NOT NULL,
                                 PRIMARY KEY (id),
                                 FOREIGN KEY (id) REFERENCES Staff(id) ON DELETE CASCADE,
-                                FOREIGN KEY (department_id) REFERENCES Department(department_id)
+                                FOREIGN KEY (department_id) REFERENCES Department(department_id) ON DELETE CASCADE
                             )""")
 
         insert_doctors = (
@@ -133,7 +133,7 @@ def create_nurse_table():
                                 department_id CHAR(10) NOT NULL,
                                 PRIMARY KEY (id),
                                 FOREIGN KEY (id) REFERENCES Staff(id) ON DELETE CASCADE,
-                                FOREIGN KEY (department_id) REFERENCES Department(department_id)
+                                FOREIGN KEY (department_id) REFERENCES Department(department_id) ON DELETE CASCADE 
                             )""")
 
         insert_nurses = (
@@ -172,8 +172,8 @@ def create_appointment_record_table():
                                 patient_id CHAR(10) NOT NULL,
                                 doctor_id CHAR(10) NOT NULL,
                                 PRIMARY KEY (appointment_id),
-                                FOREIGN KEY (patient_id) REFERENCES Patient(patient_id),
-                                FOREIGN KEY (doctor_id) REFERENCES Doctor(id)
+                                FOREIGN KEY (patient_id) REFERENCES Patient(patient_id) ON DELETE CASCADE,
+                                FOREIGN KEY (doctor_id) REFERENCES Doctor(id) ON DELETE CASCADE
                             )""")
         insert_appointments = (
             "INSERT INTO Appointment_Record(appointment_id, record_id, date, start_time, end_time, insurance_details, patient_id, doctor_id)"
@@ -191,7 +191,7 @@ def create_secretary_table():
                              PRIMARY KEY (id),
                              FOREIGN KEY (id) REFERENCES Staff(id)
                              ON DELETE CASCADE,
-                             FOREIGN KEY (doctor_id) REFERENCES Doctor(id))
+                             FOREIGN KEY (doctor_id) REFERENCES Doctor(id) ON DELETE CASCADE)
                              """)
         insert_secretaries = (
             "INSERT INTO Secretary(id, doctor_id)"
@@ -206,7 +206,7 @@ def create_secretary_language_table():
                                 secretary_id CHAR(10) NOT NULL,
                                 language CHAR(30) NOT NULL,
                                 PRIMARY KEY (secretary_id, language),
-                                FOREIGN KEY (secretary_id) REFERENCES Secretary(id)
+                                FOREIGN KEY (secretary_id) REFERENCES Secretary(id) ON DELETE CASCADE
                             )""")
         insert_secretary_languages = (
             "INSERT INTO Secretary_Language(secretary_id, language)"
@@ -1040,6 +1040,37 @@ def add_administrator():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
+
+
+############################### DELETE METHODS ###############################
+
+@app.route('/api/doctors/<string:doctorId>', methods=['DELETE'])
+def delete_doctor(doctorId):
+    global db_connection, db_cursor
+
+    # Check if the doctor with the given ID exists
+    check_doctor_query = "SELECT * FROM Doctor WHERE id = %s"
+    db_cursor.execute(check_doctor_query, (doctorId,))
+    doctor = db_cursor.fetchone()
+    if not doctor:
+        return jsonify({"error": "Doctor not found"}), 404
+
+    try:
+        # Delete the doctor from the Doctor table
+        delete_doctor_query = "DELETE FROM Doctor WHERE id = %s"
+        db_cursor.execute(delete_doctor_query, (doctorId,))
+
+        # Delete the corresponding entry from the Staff table
+        delete_staff_query = "DELETE FROM Staff WHERE id = %s"
+        db_cursor.execute(delete_staff_query, (doctorId,))
+
+        db_connection.commit()
+
+        return jsonify({"message": f"Doctor with ID {doctorId} deleted successfully"}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 

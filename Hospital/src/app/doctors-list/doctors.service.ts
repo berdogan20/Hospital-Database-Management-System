@@ -14,5 +14,11 @@ export class DoctorsService {
   return this.http.get<any[]>(this.apiUrl, { params: filters });
   }
 
+  deleteDoctor(doctorId: string): Observable<any> {
+    console.log("service : ", doctorId) // S031
+    const deleteUrl = `${this.apiUrl}/${doctorId}`;
+    console.log(deleteUrl) // http://127.0.0.1:5000/api/doctors/S031
+    return this.http.delete<any>(deleteUrl);
+  }
 
 }

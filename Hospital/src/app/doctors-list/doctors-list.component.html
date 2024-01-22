@@ -111,6 +111,7 @@
                                 <br>
                                 <br>
                                 <br>
+                                <br>
                               </div>
                             </div>
                           </div>
@@ -120,12 +121,12 @@
 
 
                     <ul *ngFor="let doctor of doctors">
-                      <li [routerLink]="['/doctor-profile', doctor.id]">
+                      <li >
                         <div class="col">
                           <div class="card teacher-card ">
                             <div class="card-body d-flex flex-column">
                               <div class="profile-av mx-auto text-center w220">
-                                <img src="assets/avatar.png" alt="" class="avatar xl rounded-circle img-thumbnail shadow-sm">
+                                <img [routerLink]="['/doctor-profile', doctor.id]" src="assets/avatar.png" alt="" class="avatar xl rounded-circle img-thumbnail shadow-sm">
                                 <div class="about-info d-flex align-items-center mt-3 justify-content-center">
                                   <div class="followers rounded-circle me-3">
                                     <a href="#">
@@ -150,6 +151,8 @@
                                 <br><span class="light-info-bg py-2 px-2 rounded-1 d-inline-block fw-bold small-11 mb-0 mt-1">{{ doctor.email }}</span>
                                 <br><span class="light-info-bg py-2 px-2 rounded-1 d-inline-block fw-bold small-11 mb-0 mt-1">{{ doctor.phone_number }}</span>
                                 <!--<div><a href="doctor-profile.html" class="btn btn-primary btn-sm">Profile</a></div>-->
+                                <br>
+                                <button class="btn btn-danger" (click)="onDeleteDoctor(doctor.id)">Delete</button>
                               </div>
                             </div>
                           </div>
