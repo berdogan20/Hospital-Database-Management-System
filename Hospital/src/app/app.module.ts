@@ -4,13 +4,10 @@ import { HttpClientModule } from '@angular/common/http'; // Import HttpClientMod
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { SignInComponent } from './sign-in/sign-in.component';
-import { SignUpComponent } from './sign-up/sign-up.component';
 import { PatientListComponent } from './patient-list/patient-list.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { DoctorsListComponent } from './doctors-list/doctors-list.component';
 import { DoctorProfileComponent } from './doctor-profile/doctor-profile.component';
-import { DoctorCommentComponent } from './doctor-comment/doctor-comment.component';
 import { CreateAppointmentComponent } from './create-appointment/create-appointment.component';
 import { AddDoctorComponent } from './add-doctor/add-doctor.component';
 import { WelcomeComponent } from './welcome/welcome.component';
@@ -26,13 +23,10 @@ import { PatientProfileComponent } from './patient-profile/patient-profile.compo
 @NgModule({
   declarations: [
     AppComponent,
-    SignInComponent,
-    SignUpComponent,
     PatientListComponent,
     NotFoundComponent,
     DoctorsListComponent,
     DoctorProfileComponent,
-    DoctorCommentComponent,
     CreateAppointmentComponent,
     AddDoctorComponent,
     WelcomeComponent,
