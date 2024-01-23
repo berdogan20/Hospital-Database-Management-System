@@ -9,6 +9,8 @@ import {DepartmentsService} from "./departments.service";
 export class DepartmentsListComponent {
   departments: any[] = [];
   filters: any = {}; // Define filters here
+  order_by: string = 'department_rating'; // Default order by department rating
+  order_direction: string = 'asc'; // Default order direction is ascending
 
   constructor(private departmentsService: DepartmentsService) {}
 
@@ -18,10 +20,20 @@ export class DepartmentsListComponent {
   }
 
   fetchDepartments() {
-    this.departmentsService.getDepartments(this.filters)
+    const params = {
+      ...this.filters,
+      order_by: this.order_by,
+      order_direction: this.order_direction
+    };
+
+    this.departmentsService.getDepartments(params)
       .subscribe((data: any[]) => {
         this.departments = data;
       });
+  }
+
+  applyOrder() {
+    this.fetchDepartments();
   }
 
   applyFilters() {
@@ -34,4 +46,6 @@ export class DepartmentsListComponent {
     this.filters = {}; // Reset filters
     this.fetchDepartments();
   }
+
+  protected readonly parseInt = parseInt;
 }

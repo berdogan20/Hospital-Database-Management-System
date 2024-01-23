@@ -21,14 +21,16 @@
                   <div class="col-md-2">
                     <div class="form-group">
                       <label for="department_name">Department Name:</label>
-                      <input type="text" id="department_name" [(ngModel)]="filters.department_name" class="form-control">
+                      <input type="text" id="department_name" [(ngModel)]="filters.department_name"
+                             class="form-control">
                     </div>
                   </div>
 
                   <div class="col-md-4">
                     <div class="form-group">
                       <label for="department_administrator_name">Department Administrator Name:</label>
-                      <input type="text" id="department_administrator_name" [(ngModel)]="filters.department_administrator_name" class="form-control">
+                      <input type="text" id="department_administrator_name"
+                             [(ngModel)]="filters.department_administrator_name" class="form-control">
                     </div>
                   </div>
 
@@ -46,6 +48,37 @@
                   </div>
                 </div>
                 <br>
+
+                <!-- order options -->
+                <div class="row mt-3">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label for="order_by">Order By:</label>
+                      <select id="order_by" class="form-select" [(ngModel)]="order_by">
+                        <option value="department_rating">Department Rating</option>
+                        <option value="gender_percentage">Gender Percentage</option>
+                        <option value="number_of_doctors">Number of Doctors</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <label for="order_direction">Order Direction:</label>
+                      <select id="order_direction" class="form-select" [(ngModel)]="order_direction">
+                        <option value="asc">Ascending</option>
+                        <option value="desc">Descending</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <br>
+                      <button (click)="applyOrder()" class="btn btn-primary">Apply Order</button>
+                    </div>
+                  </div>
+                </div>
 
                 <!-- table -->
                 <table id="appointment-table"
@@ -66,14 +99,23 @@
                     <th class="sorting" style="width: 120px;" aria-label="End Time: activate to sort column ascending">
                       Administrator Surname
                     </th>
-                    <th class="sorting" style="width: 120px;" aria-label="Patient ID: activate to sort column ascending">
+                    <th class="sorting" style="width: 120px;"
+                        aria-label="Patient ID: activate to sort column ascending">
                       Administrator email
                     </th>
                     <th class="sorting" style="width: 120px;" aria-label="Doctor ID: activate to sort column ascending">
                       Administrator Phone Number
                     </th>
+                    <th class="sorting" style="width: 60px;" aria-label="Doctor ID: activate to sort column ascending">
+                      Department Rating
+                    </th>
+                    <th class="sorting" style="width: 60px;" aria-label="Doctor ID: activate to sort column ascending">
+                      Female percentage
+                    </th>
+                    <th class="sorting" style="width: 60px;" aria-label="Doctor ID: activate to sort column ascending">
+                      Number of Doctors
+                    </th>
                   </tr>
-
 
 
                   </thead>
@@ -85,6 +127,9 @@
                     <td tabindex="0" class="sorting_1">{{ department.lname }}</td>
                     <td tabindex="0" class="sorting_1">{{ department.email }}</td>
                     <td tabindex="0" class="sorting_1">{{ department.phone_number }}</td>
+                    <td tabindex="0" class="sorting_1">{{ department.department_rating }}</td>
+                    <td tabindex="0" class="sorting_1">{{ parseInt(department.gender_percentage) }}</td>
+                    <td tabindex="0" class="sorting_1">{{ department.number_of_doctors }}</td>
                   </tr>
                   </tbody>
                 </table>

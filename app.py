@@ -22,7 +22,7 @@ mysql = MySQL(app)
 
 # creating database_cursor to perform SQL operation to run queries
 db_cursor = db_connection.cursor(buffered=True)
-#db_cursor.execute("DROP DATABASE hospital")
+db_cursor.execute("DROP DATABASE hospital")
 
 
 # executing cursor with execute method and pass SQL query
@@ -112,14 +112,15 @@ def create_doctor_table():
                                 id CHAR(10) NOT NULL,
                                 title CHAR(30),
                                 department_id CHAR(10) NOT NULL,
+                                rating INT,
                                 PRIMARY KEY (id),
                                 FOREIGN KEY (id) REFERENCES Staff(id) ON DELETE CASCADE,
                                 FOREIGN KEY (department_id) REFERENCES Department(department_id) ON DELETE CASCADE
                             )""")
 
         insert_doctors = (
-            "INSERT INTO Doctor(id, title, department_id)"
-            "VALUES (%s, %s, %s)"
+            "INSERT INTO Doctor(id, title, department_id, rating)"
+            "VALUES (%s, %s, %s, %s)"
         )
         populate_table(db_connection, db_cursor, insert_doctors, "InitialData/Doctor.csv")
 
@@ -262,18 +263,26 @@ create_secretary_language_table()
 def hello_world():  # put application's code here
     return "Hello World"
 
+
+
 @app.route('/api/departments', methods=['GET'])
 def get_departments():
     global db_cursor
 
-    # Fetch query parameters for filtering
+    # Fetch query parameters for filtering and ordering
     department_name = request.args.get('department_name')
     department_administrator_name = request.args.get('department_administrator_name')
+    order_by = request.args.get('order_by', default='department_name')
+    order_direction = request.args.get('order_direction', default='asc')
 
     # Construct the base query
-    query = ("SELECT * , Staff.fname, Staff.lname "
+    query = ("SELECT Department.*, Staff.fname, Staff.lname, Staff.email, Staff.phone_number, "
+             "SUM(Doctor.rating) AS department_rating, "
+             "COUNT(Doctor.id) AS number_of_doctors, "
+             "(SUM(Staff.gender = 'F') / COUNT(Doctor.id)) * 100 AS gender_percentage "
              "FROM Department "
              "JOIN Staff ON Department.administrator_id = Staff.id "
+             "LEFT JOIN Doctor ON Department.department_id = Doctor.department_id "
              "WHERE 1 ")
 
     # Prepare parameters for the query
@@ -287,7 +296,20 @@ def get_departments():
         query += " AND administrator_id IN (SELECT id FROM Staff WHERE Staff.fname LIKE %s)"
         params.append(f"{department_administrator_name}%")  # Add '%' for partial match
 
-    # Execute the query with filters (if any)
+    # Add GROUP BY to ensure aggregation functions work correctly
+    query += " GROUP BY Department.department_id, Staff.fname, Staff.lname "
+
+    # Add order by and order direction to the query based on the selected criteria
+    if order_by == 'department_rating':
+        query += f" ORDER BY department_rating {order_direction}"
+    elif order_by == 'gender_percentage':
+        query += f" ORDER BY gender_percentage {order_direction}"
+    elif order_by == 'number_of_doctors':
+        query += f" ORDER BY number_of_doctors {order_direction}"
+    else:
+        query += f" ORDER BY {order_by} {order_direction}"
+
+    # Execute the query with filters and ordering (if any)
     if params:
         db_cursor.execute(query, tuple(params))
     else:
@@ -300,13 +322,13 @@ def get_departments():
             return str(obj)  # Convert timedelta to string before serialization
         return obj  # Return the object unchanged if it's not a timedelta
 
-    departments = [dict(zip(db_cursor.column_names, (serialize_timedelta(field) for field in row))) for row in
-               departments]
+    departments = [dict(zip(db_cursor.column_names, (serialize_timedelta(field) for field in row))) for row in departments]
 
     # Now jsonify your departments list
     response = jsonify(departments)
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
+
 
 @app.route('/api/staff', methods=['GET'])
 def get_staff():
@@ -336,9 +358,10 @@ def get_doctors():
     lname = request.args.get('lname')
     gender = request.args.get('gender')
     department = request.args.get('department')
+    rating = request.args.get('rating')
 
     # Construct the base query
-    query = ("SELECT Staff.*, Doctor.title, Department.department_name "
+    query = ("SELECT Staff.*, Doctor.title, Department.department_name, Doctor.rating "
              "FROM Staff JOIN Doctor ON Staff.id = Doctor.id "
              "JOIN Department ON Doctor.department_id = Department.department_id WHERE 1")
 
@@ -358,6 +381,9 @@ def get_doctors():
     if department:
         query += " AND Department.department_name = %s"
         params.append(department)
+    if rating:
+        query += " AND rating = %s"
+        params.append(rating)
 
     # Execute the query with filters (if any)
     if params:

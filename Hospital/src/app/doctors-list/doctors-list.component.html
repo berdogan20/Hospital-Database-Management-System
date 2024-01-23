@@ -17,6 +17,21 @@
 
                 <!-- filters -->
                 <div class="row">
+                  <!-- Star rating dropdown -->
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <label for="rating">Star Rating</label>
+                      <select id="rating" class="form-select form-select-sm" [(ngModel)]="filters.rating">
+                        <option disabled selected>Star Rating</option>
+                        <option value="1">⭐</option>
+                        <option value="2">⭐⭐</option>
+                        <option value="3">⭐⭐⭐</option>
+                        <option value="4">⭐⭐⭐⭐</option>
+                        <option value="5">⭐⭐⭐⭐⭐</option>
+                        <option value="">All</option>
+                      </select>
+                    </div>
+                  </div>
                   <div class="col-md-2">
                     <div class="form-group">
                       <label for="department">Department</label>
@@ -56,16 +71,16 @@
                     </div>
                   </div>
 
-                  <div class="col-md-2">
+                  <div class="col-md-1">
                     <div class="form-group">
                       <br>
-                      <button (click)="applyFilters()" class="btn btn-primary ">Apply Filters</button>
+                      <button (click)="applyFilters()" class="btn btn-primary ">Apply </button>
                     </div>
                   </div>
-                  <div class="col-md-2">
+                  <div class="col-md-1">
                     <div class="form-group">
                       <br>
-                      <button (click)="clearFilters()" class="btn btn-secondary">Clear Filters</button>
+                      <button (click)="clearFilters()" class="btn btn-secondary">Clear </button>
                     </div>
                   </div>
                 </div>
@@ -81,7 +96,7 @@
                     <ul>
                       <li>
                         <div class="col">
-                          <div class="card teacher-card" [routerLink]="['/add-doctor']">
+                          <div class="card teacher-card hover-effect" [routerLink]="['/add-doctor']" >
                             <div class="card-body d-flex flex-column">
                               <div class="profile-av mx-auto text-center w220">
                                 <img src="assets/doctor.png" alt="" class="avatar xl rounded-circle img-thumbnail shadow-sm">
@@ -126,7 +141,7 @@
                           <div class="card teacher-card ">
                             <div class="card-body d-flex flex-column">
                               <div class="profile-av mx-auto text-center w220">
-                                <img [routerLink]="['/doctor-profile', doctor.id]" src="assets/avatar.png" alt="" class="avatar xl rounded-circle img-thumbnail shadow-sm">
+                                <img [routerLink]="['/doctor-profile', doctor.id]" src="assets/avatar.png" alt="" class="avatar xl rounded-circle img-thumbnail shadow-sm hover-effect">
                                 <div class="about-info d-flex align-items-center mt-3 justify-content-center">
                                   <div class="followers rounded-circle me-3">
                                     <a href="#">
