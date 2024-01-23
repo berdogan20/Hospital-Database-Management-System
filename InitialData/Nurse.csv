@@ -9,3 +9,34 @@ S027,Neurology Nurse,D007
 S028,Ophthalmology Nurse,D008
 S029,Psychiatry Nurse,D009
 S030,Radiology Nurse,D010
+S100,Pediatric Nurse,D011
+S101,Cardiac Nurse,D012
+S102,Orthopedic Nurse,D013
+S103,Internal Medicine Nurse,D014
+S104,OB/GYN Nurse,D015
+S105,Dermatology Nurse,D001
+S106,Neurology Nurse,D002
+S107,Ophthalmology Nurse,D003
+S108,Psychiatry Nurse,D004
+S109,Radiology Nurse,D005
+S110,General Surgery Nurse,D006
+S111,ENT Nurse,D007
+S112,Anesthesiology Nurse,D008
+S113,Cardiology Nurse,D009
+S114,Gastroenterology Nurse,D010
+S115,Plastic Surgery Nurse,D011
+S116,Urology Nurse,D012
+S117,Hematology Nurse,D013
+S118,Oncology Nurse,D014
+S119,Allergy and Immunology Nurse,D015
+S120,Endocrinology Nurse,D001
+S121,Physical Therapy Nurse,D002
+S122,Speech Therapy Nurse,D003
+S123,Occupational Therapy Nurse,D004
+S124,Emergency Medicine Nurse,D005
+S125,Family Medicine Nurse,D006
+S126,Infectious Disease Nurse,D007
+S127,Podiatry Nurse,D008
+S128,Pulmonology Nurse,D009
+S129,Rheumatology Nurse,D010
+S130,Medical Genetics Nurse,D011

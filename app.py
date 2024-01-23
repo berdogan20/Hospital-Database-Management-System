@@ -22,7 +22,7 @@ mysql = MySQL(app)
 
 # creating database_cursor to perform SQL operation to run queries
 db_cursor = db_connection.cursor(buffered=True)
-db_cursor.execute("DROP DATABASE hospital")
+#db_cursor.execute("DROP DATABASE hospital")
 
 
 # executing cursor with execute method and pass SQL query
